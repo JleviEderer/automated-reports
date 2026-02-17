@@ -1,0 +1,812 @@
+/* ============================================================
+   WolfPack Billboard Report — Print-Optimized Stylesheet
+   Design: EB Garamond (body) + DM Sans (headings/UI)
+   Palette: Deep navy text (#1a2332) + Burgundy accent (#7B2D3B)
+   ============================================================ */
+
+/* --- Page Setup --- */
+@page {
+  size: letter;
+  margin: 1.25in 1.25in 1in 1.25in;
+
+  @bottom-center {
+    content: counter(page);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 8pt;
+    color: #999;
+    letter-spacing: 0.1em;
+  }
+
+  @top-right {
+    content: "Colbert Cooper Hill  /  Billboard Design Analysis";
+    font-family: 'DM Sans', sans-serif;
+    font-size: 7pt;
+    color: #aaa;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+}
+
+@page :first {
+  @bottom-center { content: none; }
+  @top-right { content: none; }
+}
+
+/* --- Reset & Base --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 11pt;
+}
+
+body {
+  font-family: 'EB Garamond', 'Georgia', 'Times New Roman', serif;
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #1a2332;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* --- CSS Variables --- */
+:root {
+  --navy: #1a2332;
+  --navy-light: #2c3e5a;
+  --burgundy: #7B2D3B;
+  --burgundy-light: #a14054;
+  --burgundy-pale: #f3e8eb;
+  --text-primary: #1a2332;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --bg-warm: #faf9f7;
+  --bg-cream: #f7f5f0;
+  --border-light: #e8e4de;
+  --border-subtle: #f0ece6;
+  --rule-color: #d4cfc7;
+  --max-width: 6.5in;
+}
+
+
+/* ==========================================================
+   COVER PAGE
+   ========================================================== */
+.cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 3in 0 2in;
+  page-break-after: always;
+}
+
+.cover-logo {
+  width: 200px;
+  height: auto;
+  margin-bottom: 2.5rem;
+  opacity: 0.85;
+}
+
+.cover-rule {
+  width: 60px;
+  height: 3px;
+  background: var(--burgundy);
+  border: none;
+  margin: 0 0 2rem;
+}
+
+.cover h1 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 28pt;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+  max-width: 5.5in;
+}
+
+.cover-subtitle {
+  font-family: 'EB Garamond', serif;
+  font-size: 14pt;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+  line-height: 1.4;
+}
+
+.cover-meta {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9pt;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cover-meta span {
+  display: inline-block;
+  margin-right: 2rem;
+}
+
+.cover-meta .date-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--burgundy);
+  color: var(--burgundy);
+  font-weight: 500;
+}
+
+
+/* ==========================================================
+   SECTION HEADINGS
+   ========================================================== */
+h1.section-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 22pt;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: 0.3rem;
+  page-break-after: avoid;
+}
+
+.section-number {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10pt;
+  font-weight: 500;
+  color: var(--burgundy);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.section-rule {
+  width: 40px;
+  height: 2px;
+  background: var(--burgundy);
+  border: none;
+  margin: 1rem 0 1.75rem;
+}
+
+h2 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16pt;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.25;
+  margin-top: 2rem;
+  margin-bottom: 0.6rem;
+  page-break-after: avoid;
+}
+
+h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13pt;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.3;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  page-break-after: avoid;
+}
+
+h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10pt;
+  font-weight: 600;
+  color: var(--burgundy);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
+}
+
+
+/* ==========================================================
+   BODY TEXT
+   ========================================================== */
+p {
+  margin-bottom: 1rem;
+  orphans: 3;
+  widows: 3;
+}
+
+p.lead {
+  font-size: 12pt;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+strong {
+  font-weight: 600;
+  color: var(--navy);
+}
+
+em {
+  font-style: italic;
+}
+
+
+/* ==========================================================
+   NEW SECTION SPACING
+   ========================================================== */
+.section {
+  margin-bottom: 2.5rem;
+}
+
+.section-break {
+  page-break-before: always;
+}
+
+
+/* ==========================================================
+   EXECUTIVE SUMMARY
+   ========================================================== */
+.exec-summary p {
+  font-size: 11pt;
+  line-height: 1.65;
+}
+
+.exec-summary p:first-of-type {
+  font-size: 12pt;
+  line-height: 1.7;
+}
+
+.exec-summary p:first-of-type::first-line {
+  font-variant: small-caps;
+  letter-spacing: 0.02em;
+}
+
+
+/* ==========================================================
+   DESIGN PRINCIPLES — varied layout, not 4 identical cards
+   ========================================================== */
+.principle-featured {
+  padding: 1.5rem 0 1.5rem 1.5rem;
+  border-left: 3px solid var(--burgundy);
+  margin-bottom: 2rem;
+  page-break-inside: avoid;
+}
+
+.principle-featured h3 {
+  margin-top: 0;
+  font-size: 14pt;
+  color: var(--burgundy);
+}
+
+.principle-featured p {
+  color: var(--text-secondary);
+  font-size: 10.5pt;
+  line-height: 1.65;
+  margin-bottom: 0;
+}
+
+.principles-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.principle-compact {
+  page-break-inside: avoid;
+}
+
+.principle-compact h3 {
+  margin-top: 0;
+  font-size: 13pt;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.principle-compact p {
+  color: var(--text-secondary);
+  font-size: 10.5pt;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+.principle-aside {
+  background: var(--bg-cream);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  page-break-inside: avoid;
+}
+
+.principle-aside h3 {
+  margin-top: 0;
+  font-size: 13pt;
+}
+
+.principle-aside p {
+  color: var(--text-secondary);
+  font-size: 10.5pt;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+
+/* ==========================================================
+   VARIANT ANALYSIS CARDS
+   ========================================================== */
+.variant {
+  margin-bottom: 2.5rem;
+  page-break-inside: auto;
+}
+
+.variant-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  page-break-after: avoid;
+}
+
+.variant-tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9pt;
+  font-weight: 700;
+  color: #fff;
+  background: var(--burgundy);
+  padding: 0.2rem 0.6rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.variant-header h2 {
+  margin: 0;
+  font-size: 16pt;
+}
+
+.variant-image-frame {
+  margin: 0 0 1.25rem;
+  page-break-inside: avoid;
+}
+
+.variant-image-frame img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid var(--border-light);
+}
+
+.variant-image-frame figcaption {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 9.5pt;
+  color: var(--text-muted);
+  margin-top: 0.4rem;
+}
+
+.variant-layout-desc {
+  color: var(--text-secondary);
+  font-size: 10.5pt;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--border-light);
+}
+
+.variant-layout-items {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.variant-layout-items li {
+  padding: 0.15rem 0;
+  font-size: 10pt;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.variant-layout-items li::before {
+  content: "\2014\00a0";
+  color: var(--rule-color);
+}
+
+
+/* Strengths & Concerns */
+.assessment-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.assessment-col {
+  page-break-inside: avoid;
+}
+
+.assessment-col h4 {
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.assessment-col.strengths h4 {
+  color: #2d6a4f;
+}
+
+.assessment-col.concerns h4 {
+  color: #b45309;
+}
+
+.assessment-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.assessment-col ul li {
+  font-size: 10pt;
+  line-height: 1.55;
+  padding: 0.4rem 0 0.4rem 1.2rem;
+  position: relative;
+  border-bottom: 1px solid var(--border-subtle);
+  orphans: 3;
+  widows: 3;
+}
+
+.assessment-col ul li:last-child {
+  border-bottom: none;
+}
+
+.assessment-col.strengths ul li::before {
+  content: "+";
+  position: absolute;
+  left: 0;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  color: #2d6a4f;
+}
+
+.assessment-col.concerns ul li::before {
+  content: "\2013";
+  position: absolute;
+  left: 0;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  color: #b45309;
+}
+
+
+/* ==========================================================
+   COMPARATIVE TABLE
+   ========================================================== */
+.comp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10pt;
+  margin-top: 1rem;
+  page-break-inside: avoid;
+}
+
+.comp-table thead th {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8.5pt;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 0.6rem 0.5rem;
+  border-bottom: 2px solid var(--navy);
+}
+
+.comp-table thead th:first-child {
+  text-align: left;
+}
+
+.comp-table tbody td {
+  padding: 0.55rem 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: middle;
+}
+
+.comp-table tbody td:first-child {
+  text-align: left;
+  font-weight: 600;
+  color: var(--navy);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9.5pt;
+}
+
+.comp-table tbody tr:last-child td {
+  border-bottom: 2px solid var(--navy);
+}
+
+/* Rating pills */
+.pill {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8.5pt;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 2px;
+}
+
+.pill-excellent { background: #d1e7dd; color: #0f5132; }
+.pill-strong    { background: #d1e7dd; color: #0f5132; }
+.pill-good      { background: #e2e8f0; color: #334155; }
+.pill-moderate  { background: #fef3c7; color: #92400e; }
+.pill-weak      { background: #fce4ec; color: #881337; }
+.pill-flawed    { background: #fce4ec; color: #881337; }
+
+
+/* ==========================================================
+   DISTANCE READABILITY
+   ========================================================== */
+.distance-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.distance-row:last-child {
+  border-bottom: none;
+}
+
+.distance-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13pt;
+  font-weight: 700;
+  color: var(--burgundy);
+  white-space: nowrap;
+  min-width: 100px;
+  flex-shrink: 0;
+  line-height: 1.6;
+}
+
+.distance-desc {
+  font-size: 10.5pt;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+
+/* ==========================================================
+   RECOMMENDATION
+   ========================================================== */
+.tier {
+  margin-bottom: 2rem;
+  page-break-inside: avoid;
+}
+
+.tier-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9pt;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 0.4rem;
+}
+
+.tier-1 .tier-label {
+  color: var(--burgundy);
+  border-bottom: 2px solid var(--burgundy);
+  padding-bottom: 0.15rem;
+}
+
+.tier-2 .tier-label {
+  color: var(--text-muted);
+  border-bottom: 2px solid var(--rule-color);
+  padding-bottom: 0.15rem;
+}
+
+.tier h3 {
+  margin-top: 0.25rem;
+}
+
+.tier p {
+  font-size: 10.5pt;
+  line-height: 1.65;
+}
+
+.closing-note {
+  border-left: 3px solid var(--burgundy);
+  padding: 1rem 0 1rem 1.5rem;
+  margin-top: 2rem;
+  page-break-inside: avoid;
+}
+
+.closing-note p {
+  font-size: 10.5pt;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin-bottom: 0;
+}
+
+
+/* ==========================================================
+   APPENDIX
+   ========================================================== */
+.appendix-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.appendix-block {
+  page-break-inside: avoid;
+}
+
+.appendix-block.full-width {
+  grid-column: 1 / -1;
+}
+
+.appendix-block h3 {
+  margin-top: 0;
+  font-size: 13pt;
+  margin-bottom: 0.75rem;
+}
+
+/* Color swatches */
+.swatch-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.swatch {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.swatch-info {
+  font-size: 10pt;
+  line-height: 1.4;
+}
+
+.swatch-info .hex {
+  font-family: 'Courier New', monospace;
+  font-size: 9pt;
+  color: var(--text-muted);
+}
+
+/* Typography notes */
+.typo-notes {
+  list-style: none;
+  padding: 0;
+}
+
+.typo-notes li {
+  font-size: 10pt;
+  line-height: 1.55;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.typo-notes li:last-child {
+  border-bottom: none;
+}
+
+/* Inventory table */
+.inv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10pt;
+}
+
+.inv-table td {
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: top;
+}
+
+.inv-table td:first-child {
+  font-family: 'Courier New', monospace;
+  font-size: 9pt;
+  color: var(--navy);
+  font-weight: 600;
+  white-space: nowrap;
+  padding-right: 1.5rem;
+}
+
+.inv-table td:last-child {
+  color: var(--text-secondary);
+}
+
+.inv-table tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+.report-footer {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule-color);
+  text-align: center;
+}
+
+.report-footer img {
+  width: 140px;
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
+}
+
+.report-footer p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8pt;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+
+/* ==========================================================
+   PAGE BREAK CONTROLS
+   ========================================================== */
+h1, h2, h3, h4 {
+  page-break-after: avoid;
+}
+
+.variant-image-frame,
+.comp-table,
+.tier,
+.principle-featured,
+.principle-compact,
+.principle-aside,
+.closing-note {
+  page-break-inside: avoid;
+}
+
+table {
+  page-break-inside: avoid;
+}
+
+p, li {
+  orphans: 3;
+  widows: 3;
+}
+
+
+/* ==========================================================
+   SCREEN PREVIEW (non-print)
+   ========================================================== */
+@media screen {
+  body {
+    max-width: 8.5in;
+    margin: 0 auto;
+    padding: 0 1.25in;
+    background: #fdfdfc;
+  }
+
+  .cover {
+    min-height: 90vh;
+    padding: 4rem 0 3rem;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .section-break {
+    page-break-before: always;
+  }
+}

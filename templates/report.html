@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ report.title }} &mdash; Colbert Cooper Hill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/print.css">
+</head>
+<body>
+
+
+<!-- ================================================================
+     COVER PAGE
+     ================================================================ -->
+<div class="cover">
+  <img src="../{{ report.logo }}" alt="Colbert Cooper Hill" class="cover-logo">
+  <hr class="cover-rule">
+  <h1>{{ report.title }}</h1>
+  <p class="cover-subtitle">{{ report.subtitle }}</p>
+  <div class="cover-meta">
+    <span class="date-badge">{{ report.date }}</span>
+  </div>
+</div>
+
+
+<!-- ================================================================
+     1. EXECUTIVE SUMMARY
+     ================================================================ -->
+<div class="section">
+  <span class="section-number">Section One</span>
+  <h1 class="section-title">Executive Summary</h1>
+  <hr class="section-rule">
+
+  <div class="exec-summary">
+    {% for paragraph in executive_summary %}
+    <p>{{ paragraph }}</p>
+    {% endfor %}
+  </div>
+</div>
+
+
+<!-- ================================================================
+     2. DESIGN PRINCIPLES
+     ================================================================ -->
+<div class="section section-break">
+  <span class="section-number">Section Two</span>
+  <h1 class="section-title">Design Principles</h1>
+  <hr class="section-rule">
+
+  <!-- Lead principle: featured/callout treatment -->
+  {% if design_principles|length > 0 %}
+  <div class="principle-featured">
+    <h3>{{ design_principles[0].title }}</h3>
+    <p>{{ design_principles[0].description }}</p>
+  </div>
+  {% endif %}
+
+  <!-- Middle two: side-by-side compact -->
+  {% if design_principles|length > 2 %}
+  <div class="principles-pair">
+    <div class="principle-compact">
+      <h3>{{ design_principles[1].title }}</h3>
+      <p>{{ design_principles[1].description }}</p>
+    </div>
+    <div class="principle-compact">
+      <h3>{{ design_principles[2].title }}</h3>
+      <p>{{ design_principles[2].description }}</p>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Final principle: aside/tinted treatment -->
+  {% if design_principles|length > 3 %}
+  <div class="principle-aside">
+    <h3>{{ design_principles[3].title }}</h3>
+    <p>{{ design_principles[3].description }}</p>
+  </div>
+  {% endif %}
+</div>
+
+
+<!-- ================================================================
+     3. VARIANT-BY-VARIANT ANALYSIS
+     ================================================================ -->
+<div class="section section-break">
+  <span class="section-number">Section Three</span>
+  <h1 class="section-title">Variant-by-Variant Analysis</h1>
+  <hr class="section-rule">
+
+  {% for variant in variants %}
+  <div class="variant">
+    <div class="variant-header">
+      <span class="variant-tag">{{ variant.id }}</span>
+      <h2>{{ variant.name }}</h2>
+    </div>
+
+    <figure class="variant-image-frame">
+      <img src="../{{ variant.image }}" alt="Billboard {{ variant.id }} Design: {{ variant.name }}">
+      <figcaption>Figure {{ loop.index }}. {{ variant.id }} billboard concept &mdash; {{ variant.name|lower }}</figcaption>
+    </figure>
+
+    <div class="variant-layout-desc">
+      <p>{{ variant.layout_description }}</p>
+      <ul class="variant-layout-items">
+        {% for item in variant.layout %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="assessment-grid">
+      <div class="assessment-col strengths">
+        <h4>Strengths</h4>
+        <ul>
+          {% for strength in variant.strengths %}
+          <li>{{ strength }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="assessment-col concerns">
+        <h4>Concerns</h4>
+        <ul>
+          {% for concern in variant.concerns %}
+          <li>{{ concern }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+
+
+<!-- ================================================================
+     4. COMPARATIVE MATRIX
+     ================================================================ -->
+<div class="section section-break">
+  <span class="section-number">Section Four</span>
+  <h1 class="section-title">Comparative Matrix</h1>
+  <hr class="section-rule">
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Criterion</th>
+        {% for variant in variants %}
+        <th>{{ variant.id }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for criterion in comparative_matrix.criteria %}
+      <tr>
+        <td>{{ criterion }}</td>
+        {% for variant in variants %}
+        {% set rating = comparative_matrix.ratings[variant.id][loop.index0] %}
+        <td><span class="pill pill-{{ rating|lower }}">{{ rating }}</span></td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ================================================================
+     5. DISTANCE READABILITY
+     ================================================================ -->
+<div class="section" style="margin-top: 2.5rem;">
+  <span class="section-number">Section Five</span>
+  <h1 class="section-title">Distance Readability</h1>
+  <hr class="section-rule">
+
+  {% for entry in distance_readability %}
+  <div class="distance-row">
+    <span class="distance-label">{{ entry.distance }}</span>
+    <p class="distance-desc">{{ entry.description }}</p>
+  </div>
+  {% endfor %}
+</div>
+
+
+<!-- ================================================================
+     6. RECOMMENDATION
+     ================================================================ -->
+<div class="section section-break">
+  <span class="section-number">Section Six</span>
+  <h1 class="section-title">Recommendation</h1>
+  <hr class="section-rule">
+
+  <div class="tier tier-1">
+    <span class="tier-label">Tier 1</span>
+    <h3>{{ recommendation.tier1.label }}</h3>
+    {% for paragraph in recommendation.tier1.content %}
+    <p>{{ paragraph }}</p>
+    {% endfor %}
+  </div>
+
+  <div class="tier tier-2">
+    <span class="tier-label">Tier 2</span>
+    <h3>{{ recommendation.tier2.label }}</h3>
+    {% for paragraph in recommendation.tier2.content %}
+    <p>{{ paragraph }}</p>
+    {% endfor %}
+  </div>
+
+  <div class="closing-note">
+    <p>{{ recommendation.closing }}</p>
+  </div>
+</div>
+
+
+<!-- ================================================================
+     7. APPENDIX
+     ================================================================ -->
+<div class="section section-break">
+  <span class="section-number">Appendix</span>
+  <h1 class="section-title">Technical Reference</h1>
+  <hr class="section-rule">
+
+  <div class="appendix-grid">
+
+    <div class="appendix-block">
+      <h3>Color Specifications</h3>
+      {% for color in appendix.colors %}
+      <div class="swatch-row">
+        <div class="swatch" style="background: {{ color.hex }};{% if color.hex == '#FFFFFF' %} border: 1px solid #ccc;{% endif %}"></div>
+        <div class="swatch-info"><strong>{{ color.name }}</strong><br><span class="hex">{{ color.hex }}</span> &mdash; {{ color.usage }}</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="appendix-block">
+      <h3>Typography Notes</h3>
+      <ul class="typo-notes">
+        {% for note in appendix.typography %}
+        <li>{{ note }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="appendix-block full-width">
+      <h3>Image Inventory</h3>
+      <table class="inv-table">
+        {% for img in appendix.images %}
+        <tr><td>{{ img.file }}</td><td>{{ img.description }}</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ================================================================
+     FOOTER
+     ================================================================ -->
+<div class="report-footer">
+  <img src="../{{ report.logo }}" alt="Colbert Cooper Hill"><br>
+  <p>Confidential &mdash; Prepared for Colbert Cooper Hill &mdash; {{ report.date }}</p>
+</div>
+
+
+</body>
+</html>
