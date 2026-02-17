@@ -16,7 +16,7 @@
      COVER PAGE
      ================================================================ -->
 <div class="cover">
-  <img src="../{{ report.logo }}" alt="Colbert Cooper Hill" class="cover-logo">
+  <img src="{{ report.logo_path }}" alt="Colbert Cooper Hill" class="cover-logo">
   <hr class="cover-rule">
   <h1>{{ report.title }}</h1>
   <p class="cover-subtitle">{{ report.subtitle }}</p>
@@ -43,40 +43,48 @@
 
 
 <!-- ================================================================
-     2. DESIGN PRINCIPLES
+     2. THE DESIGN STRATEGY
      ================================================================ -->
 <div class="section section-break">
   <span class="section-number">Section Two</span>
-  <h1 class="section-title">Design Principles</h1>
+  <h1 class="section-title">The Design Strategy</h1>
   <hr class="section-rule">
 
   <!-- Lead principle: featured/callout treatment -->
-  {% if design_principles|length > 0 %}
+  {% if design_strategy|length > 0 %}
   <div class="principle-featured">
-    <h3>{{ design_principles[0].title }}</h3>
-    <p>{{ design_principles[0].description }}</p>
+    <h3>{{ design_strategy[0].title }}</h3>
+    {% for p in design_strategy[0].paragraphs %}
+    <p>{{ p }}</p>
+    {% endfor %}
   </div>
   {% endif %}
 
   <!-- Middle two: side-by-side compact -->
-  {% if design_principles|length > 2 %}
+  {% if design_strategy|length > 2 %}
   <div class="principles-pair">
     <div class="principle-compact">
-      <h3>{{ design_principles[1].title }}</h3>
-      <p>{{ design_principles[1].description }}</p>
+      <h3>{{ design_strategy[1].title }}</h3>
+      {% for p in design_strategy[1].paragraphs %}
+      <p>{{ p }}</p>
+      {% endfor %}
     </div>
     <div class="principle-compact">
-      <h3>{{ design_principles[2].title }}</h3>
-      <p>{{ design_principles[2].description }}</p>
+      <h3>{{ design_strategy[2].title }}</h3>
+      {% for p in design_strategy[2].paragraphs %}
+      <p>{{ p }}</p>
+      {% endfor %}
     </div>
   </div>
   {% endif %}
 
   <!-- Final principle: aside/tinted treatment -->
-  {% if design_principles|length > 3 %}
+  {% if design_strategy|length > 3 %}
   <div class="principle-aside">
-    <h3>{{ design_principles[3].title }}</h3>
-    <p>{{ design_principles[3].description }}</p>
+    <h3>{{ design_strategy[3].title }}</h3>
+    {% for p in design_strategy[3].paragraphs %}
+    <p>{{ p }}</p>
+    {% endfor %}
   </div>
   {% endif %}
 </div>
@@ -87,47 +95,25 @@
      ================================================================ -->
 <div class="section section-break">
   <span class="section-number">Section Three</span>
-  <h1 class="section-title">Variant-by-Variant Analysis</h1>
+  <h1 class="section-title">Variant Analysis</h1>
   <hr class="section-rule">
 
   {% for variant in variants %}
   <div class="variant">
     <div class="variant-header">
-      <span class="variant-tag">{{ variant.id }}</span>
+      <span class="variant-tag{% if variant.recommended %} recommended{% endif %}">{{ variant.id }}</span>
       <h2>{{ variant.name }}</h2>
     </div>
 
     <figure class="variant-image-frame">
-      <img src="../{{ variant.image }}" alt="Billboard {{ variant.id }} Design: {{ variant.name }}">
+      <img src="{{ variant.image_path }}" alt="Billboard {{ variant.id }} Design: {{ variant.name }}">
       <figcaption>Figure {{ loop.index }}. {{ variant.id }} billboard concept &mdash; {{ variant.name|lower }}</figcaption>
     </figure>
 
-    <div class="variant-layout-desc">
-      <p>{{ variant.layout_description }}</p>
-      <ul class="variant-layout-items">
-        {% for item in variant.layout %}
-        <li>{{ item }}</li>
-        {% endfor %}
-      </ul>
-    </div>
-
-    <div class="assessment-grid">
-      <div class="assessment-col strengths">
-        <h4>Strengths</h4>
-        <ul>
-          {% for strength in variant.strengths %}
-          <li>{{ strength }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-      <div class="assessment-col concerns">
-        <h4>Concerns</h4>
-        <ul>
-          {% for concern in variant.concerns %}
-          <li>{{ concern }}</li>
-          {% endfor %}
-        </ul>
-      </div>
+    <div class="variant-body">
+      {% for p in variant.paragraphs %}
+      <p>{{ p }}</p>
+      {% endfor %}
     </div>
   </div>
   {% endfor %}
@@ -140,40 +126,49 @@
      ================================================================ -->
 <div class="section section-break">
   <span class="section-number">Section Four</span>
-  <h1 class="section-title">Comparative Matrix</h1>
+  <h1 class="section-title">Comparative Evaluation</h1>
   <hr class="section-rule">
+
+  <p>{{ comparative_intro }}</p>
 
   <table class="comp-table">
     <thead>
       <tr>
         <th>Criterion</th>
         {% for variant in variants %}
-        <th>{{ variant.id }}</th>
+        <th{% if variant.recommended %} class="highlight"{% endif %}>{{ variant.id }}</th>
         {% endfor %}
       </tr>
     </thead>
     <tbody>
-      {% for criterion in comparative_matrix.criteria %}
+      {% for row in comparative_matrix %}
       <tr>
-        <td>{{ criterion }}</td>
-        {% for variant in variants %}
-        {% set rating = comparative_matrix.ratings[variant.id][loop.index0] %}
+        <td>{{ row.criterion }}</td>
+        {% for rating in row.ratings %}
         <td><span class="pill pill-{{ rating|lower }}">{{ rating }}</span></td>
         {% endfor %}
       </tr>
       {% endfor %}
     </tbody>
   </table>
+
+  <div class="comp-summary">
+    {% for p in comparative_summary %}
+    <p>{{ p }}</p>
+    {% endfor %}
+  </div>
 </div>
 
 
 <!-- ================================================================
      5. DISTANCE READABILITY
      ================================================================ -->
-<div class="section" style="margin-top: 2.5rem;">
+<div class="section section-break">
   <span class="section-number">Section Five</span>
   <h1 class="section-title">Distance Readability</h1>
   <hr class="section-rule">
+
+  <p style="margin-bottom: 1.5rem;">{{ distance_intro }}</p>
 
   {% for entry in distance_readability %}
   <div class="distance-row">
@@ -181,35 +176,38 @@
     <p class="distance-desc">{{ entry.description }}</p>
   </div>
   {% endfor %}
+
+  <p class="distance-closing">{{ distance_closing }}</p>
 </div>
 
 
 <!-- ================================================================
-     6. RECOMMENDATION
+     6. RECOMMENDATIONS
      ================================================================ -->
 <div class="section section-break">
   <span class="section-number">Section Six</span>
-  <h1 class="section-title">Recommendation</h1>
+  <h1 class="section-title">Recommendations</h1>
   <hr class="section-rule">
 
   <div class="tier tier-1">
-    <span class="tier-label">Tier 1</span>
-    <h3>{{ recommendation.tier1.label }}</h3>
-    {% for paragraph in recommendation.tier1.content %}
-    <p>{{ paragraph }}</p>
+    <span class="tier-label">{{ recommendation.tier1.label }}</span>
+    <h3>{{ recommendation.tier1.heading }}</h3>
+    {% for p in recommendation.tier1.paragraphs %}
+    <p>{{ p }}</p>
     {% endfor %}
   </div>
 
   <div class="tier tier-2">
-    <span class="tier-label">Tier 2</span>
-    <h3>{{ recommendation.tier2.label }}</h3>
-    {% for paragraph in recommendation.tier2.content %}
-    <p>{{ paragraph }}</p>
+    <span class="tier-label">{{ recommendation.tier2.label }}</span>
+    <h3>{{ recommendation.tier2.heading }}</h3>
+    {% for p in recommendation.tier2.paragraphs %}
+    <p>{{ p }}</p>
     {% endfor %}
   </div>
 
   <div class="closing-note">
-    <p>{{ recommendation.closing }}</p>
+    <h3>{{ recommendation.closing.heading }}</h3>
+    <p>{{ recommendation.closing.text }}</p>
   </div>
 </div>
 
@@ -225,7 +223,7 @@
   <div class="appendix-grid">
 
     <div class="appendix-block">
-      <h3>Color Specifications</h3>
+      <h3>Billboard Color Palette</h3>
       {% for color in appendix.colors %}
       <div class="swatch-row">
         <div class="swatch" style="background: {{ color.hex }};{% if color.hex == '#FFFFFF' %} border: 1px solid #ccc;{% endif %}"></div>
@@ -260,7 +258,7 @@
      FOOTER
      ================================================================ -->
 <div class="report-footer">
-  <img src="../{{ report.logo }}" alt="Colbert Cooper Hill"><br>
+  <img src="{{ report.logo_path }}" alt="Colbert Cooper Hill"><br>
   <p>Confidential &mdash; Prepared for Colbert Cooper Hill &mdash; {{ report.date }}</p>
 </div>
 

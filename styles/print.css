@@ -267,8 +267,17 @@ em {
 
 
 /* ==========================================================
-   DESIGN PRINCIPLES — varied layout, not 4 identical cards
+   DESIGN STRATEGY — subsection treatments
    ========================================================== */
+.strategy-intro {
+  margin-bottom: 2rem;
+}
+
+.strategy-intro p {
+  font-size: 11pt;
+  line-height: 1.65;
+}
+
 .principle-featured {
   padding: 1.5rem 0 1.5rem 1.5rem;
   border-left: 3px solid var(--burgundy);
@@ -287,6 +296,10 @@ em {
   font-size: 10.5pt;
   line-height: 1.65;
   margin-bottom: 0;
+}
+
+.principle-featured p + p {
+  margin-top: 0.75rem;
 }
 
 .principles-pair {
@@ -314,6 +327,10 @@ em {
   margin-bottom: 0;
 }
 
+.principle-compact p + p {
+  margin-top: 0.65rem;
+}
+
 .principle-aside {
   background: var(--bg-cream);
   padding: 1.25rem 1.5rem;
@@ -333,9 +350,13 @@ em {
   margin-bottom: 0;
 }
 
+.principle-aside p + p {
+  margin-top: 0.65rem;
+}
+
 
 /* ==========================================================
-   VARIANT ANALYSIS CARDS
+   VARIANT ANALYSIS
    ========================================================== */
 .variant {
   margin-bottom: 2.5rem;
@@ -363,6 +384,10 @@ em {
   flex-shrink: 0;
 }
 
+.variant-tag.recommended {
+  background: var(--navy);
+}
+
 .variant-header h2 {
   margin: 0;
   font-size: 16pt;
@@ -374,7 +399,8 @@ em {
 }
 
 .variant-image-frame img {
-  width: 100%;
+  width: 90%;
+  max-width: 100%;
   height: auto;
   display: block;
   border: 1px solid var(--border-light);
@@ -388,96 +414,15 @@ em {
   margin-top: 0.4rem;
 }
 
-.variant-layout-desc {
-  color: var(--text-secondary);
+.variant-body p {
   font-size: 10.5pt;
-  line-height: 1.6;
-  margin-bottom: 1.25rem;
-  padding-left: 1rem;
-  border-left: 2px solid var(--border-light);
-}
-
-.variant-layout-items {
-  list-style: none;
-  padding: 0;
-  margin: 0.5rem 0 0;
-}
-
-.variant-layout-items li {
-  padding: 0.15rem 0;
-  font-size: 10pt;
+  line-height: 1.65;
   color: var(--text-secondary);
-  line-height: 1.5;
 }
 
-.variant-layout-items li::before {
-  content: "\2014\00a0";
-  color: var(--rule-color);
-}
-
-
-/* Strengths & Concerns */
-.assessment-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-
-.assessment-col {
-  page-break-inside: avoid;
-}
-
-.assessment-col h4 {
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.35rem;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.assessment-col.strengths h4 {
-  color: #2d6a4f;
-}
-
-.assessment-col.concerns h4 {
-  color: #b45309;
-}
-
-.assessment-col ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.assessment-col ul li {
-  font-size: 10pt;
-  line-height: 1.55;
-  padding: 0.4rem 0 0.4rem 1.2rem;
-  position: relative;
-  border-bottom: 1px solid var(--border-subtle);
-  orphans: 3;
-  widows: 3;
-}
-
-.assessment-col ul li:last-child {
-  border-bottom: none;
-}
-
-.assessment-col.strengths ul li::before {
-  content: "+";
-  position: absolute;
-  left: 0;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 700;
-  color: #2d6a4f;
-}
-
-.assessment-col.concerns ul li::before {
-  content: "\2013";
-  position: absolute;
-  left: 0;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 700;
-  color: #b45309;
+.variant-body p:first-child {
+  font-size: 11pt;
+  color: var(--text-primary);
 }
 
 
@@ -508,6 +453,10 @@ em {
   text-align: left;
 }
 
+.comp-table thead th.highlight {
+  color: var(--burgundy);
+}
+
 .comp-table tbody td {
   padding: 0.55rem 0.5rem;
   text-align: center;
@@ -527,7 +476,7 @@ em {
   border-bottom: 2px solid var(--navy);
 }
 
-/* Rating pills */
+/* Rating pills — single-hue burgundy scale */
 .pill {
   display: inline-block;
   padding: 0.1rem 0.5rem;
@@ -538,12 +487,21 @@ em {
   border-radius: 2px;
 }
 
-.pill-excellent { background: #d1e7dd; color: #0f5132; }
-.pill-strong    { background: #d1e7dd; color: #0f5132; }
-.pill-good      { background: #e2e8f0; color: #334155; }
-.pill-moderate  { background: #fef3c7; color: #92400e; }
-.pill-weak      { background: #fce4ec; color: #881337; }
-.pill-flawed    { background: #fce4ec; color: #881337; }
+.pill-excellent { background: #7B2D3B; color: #fff; }
+.pill-strong    { background: #a14054; color: #fff; }
+.pill-good      { background: #c4727f; color: #fff; }
+.pill-moderate  { background: #dba6ad; color: #4a2028; }
+.pill-weak      { background: #f3e8eb; color: #7B2D3B; }
+.pill-flawed    { background: #f3e8eb; color: #7B2D3B; }
+
+.comp-summary {
+  margin-top: 1.5rem;
+}
+
+.comp-summary p {
+  font-size: 10.5pt;
+  line-height: 1.65;
+}
 
 
 /* ==========================================================
@@ -555,9 +513,10 @@ em {
   gap: 1.5rem;
   padding: 1rem 0;
   border-bottom: 1px solid var(--border-light);
+  page-break-inside: avoid;
 }
 
-.distance-row:last-child {
+.distance-row:last-of-type {
   border-bottom: none;
 }
 
@@ -567,7 +526,7 @@ em {
   font-weight: 700;
   color: var(--burgundy);
   white-space: nowrap;
-  min-width: 100px;
+  min-width: 120px;
   flex-shrink: 0;
   line-height: 1.6;
 }
@@ -576,11 +535,19 @@ em {
   font-size: 10.5pt;
   line-height: 1.6;
   color: var(--text-secondary);
+  margin-bottom: 0;
+}
+
+.distance-closing {
+  margin-top: 1.25rem;
+  font-size: 10.5pt;
+  line-height: 1.65;
+  color: var(--text-secondary);
 }
 
 
 /* ==========================================================
-   RECOMMENDATION
+   RECOMMENDATIONS
    ========================================================== */
 .tier {
   margin-bottom: 2rem;
@@ -623,6 +590,13 @@ em {
   padding: 1rem 0 1rem 1.5rem;
   margin-top: 2rem;
   page-break-inside: avoid;
+}
+
+.closing-note h3 {
+  margin-top: 0;
+  font-size: 13pt;
+  color: var(--burgundy);
+  margin-bottom: 0.5rem;
 }
 
 .closing-note p {
@@ -770,7 +744,8 @@ h1, h2, h3, h4 {
 .principle-featured,
 .principle-compact,
 .principle-aside,
-.closing-note {
+.closing-note,
+.distance-row {
   page-break-inside: avoid;
 }
 
