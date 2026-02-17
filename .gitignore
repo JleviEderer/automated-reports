@@ -1,3 +1,4 @@
 .report-in-progress
 data/
 output/
+.playwright-mcp/

@@ -56,6 +56,14 @@ The main agent acts as the loop controller. It spawns subagents via `Task` calls
 
 ### Pipeline Stages
 
+**Stage 0 — Cleanup**
+- Main agent handles directly — no subagent
+- Delete all contents of `output/` (stale HTML, PDF, QA reports, screenshots)
+- Delete `data/content.json` if it exists (stale Content Agent output)
+- Do NOT delete other files in `data/` — those are raw source input
+- Write `.report-in-progress` flag file
+- This ensures the stop hook and QA loop start from a clean state
+
 **Stage 1 — Content Agent**
 - Spawn via `Task` with `subagent_type: "general-purpose"`, `mode: "bypassPermissions"`
 - Prompt: full contents of `.claude/agents/content/content.md` + the task-specific instructions
@@ -86,6 +94,10 @@ After Stage 4, the main agent reads `output/qa-report.json` and follows this log
 
 ```
 iteration = 1
+
+cleanup:
+  delete output/* and data/content.json
+  write .report-in-progress
 
 loop:
   run Stage 1 → Stage 2 → Stage 3 → Stage 4
@@ -143,7 +155,7 @@ Task(
 A Stop hook in `.claude/settings.json` prevents the agent from finishing before QA passes. The hook is gated by a `.report-in-progress` flag file — it only activates during report generation.
 
 **Main agent responsibilities:**
-- Write `.report-in-progress` at the start of the pipeline (before spawning Content Agent)
+- Stage 0 writes `.report-in-progress` (see Pipeline Stages above)
 - The hook auto-cleans the flag on QA PASS or after 3 iterations
 - If the agent tries to stop before QA passes, the hook blocks exit with the QA failure details
 
