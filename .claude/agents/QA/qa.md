@@ -33,6 +33,18 @@ You are the gatekeeper. No report ships until you pass it. Be strict — it's be
 - [ ] No repetitive section structure
 - [ ] Figures/charts have captions
 
+### Page Density & Breaks
+- [ ] No page less than 40% filled (except cover and final section pages)
+- [ ] No table split across pages
+- [ ] No heading with fewer than 3 lines of body text below it on same page
+- [ ] No image separated from its caption
+- [ ] No page that looks visually top-heavy or bottom-heavy
+
+### Structure & Consistency
+- [ ] No more than 2 font families in the document
+- [ ] No more than 3 colors used (excluding images)
+- [ ] No 3+ consecutive sections with identical structure — vary the rhythm
+
 ### The Screenshot Test
 - [ ] If someone saw a screenshot of any page, they would not guess AI made it
 

@@ -46,6 +46,23 @@ You handle HTML template creation, CSS styling, and PDF rendering. Every report 
 - Gray text on gray backgrounds
 - Decorative clip art, stock icons, or emoji
 
+## Page Content Rules
+- No page less than 40% filled unless it's the last page of a section or a cover page
+- If remaining content would fill less than 40%, pull back or push forward
+
+## Page Break Rules (override the 40% rule)
+- **Tables**: never split across pages. If it won't fit, start on next page.
+- **Images with captions**: keep together, never split
+- **Headings**: must have at least 3 lines of body text below on same page
+- **Priority when rules conflict**: 1) Never break tables/images/heading groups, 2) Minimize empty space, 3) When in doubt, next page
+
+## Additional Layout Rules
+- Widows/orphans: minimum 3 lines of a paragraph on either side of a page break
+- Figures numbered sequentially, referenced in prose before they appear
+- Consistent spacing throughout — same gap between headings and paragraphs everywhere
+- No back-to-back images without prose between them
+- Headers/footers on every page except cover
+
 ## File Contract
 - Read: `data/content.md`, image files in `data/` (`*.png`, `*.jpg`)
 - Write: `output/report.html` (complete HTML with embedded CSS, all content injected)
