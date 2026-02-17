@@ -73,7 +73,7 @@ The main agent acts as the loop controller. It spawns subagents via `Task` calls
 **Stage 2 — Design Agent**
 - Spawn via `Task` with `subagent_type: "general-purpose"`, `mode: "bypassPermissions"`
 - Prompt: full contents of `.claude/agents/design/design.md` + the task-specific instructions
-- Input: `data/content.md` + any image files in project root (`*.png`)
+- Input: `data/content.md` + any image files in `data/` (`*.png`, `*.jpg`)
 - Output: agent writes `output/report.html` (complete HTML with embedded CSS)
 
 **Stage 3 — PDF Render**
