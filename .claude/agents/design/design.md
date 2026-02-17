@@ -47,7 +47,7 @@ You handle HTML template creation, CSS styling, and PDF rendering. Every report 
 - Decorative clip art, stock icons, or emoji
 
 ## File Contract
-- Read: `data/content.json`, image files in project root (`*.png`)
+- Read: `data/content.md`, image files in project root (`*.png`)
 - Write: `output/report.html` (complete HTML with embedded CSS, all content injected)
 - Also write: `styles/print.css`, `templates/report.html`
 - On re-run: also read `output/qa-report.json`, fix ONLY flagged design issues

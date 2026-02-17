@@ -6,7 +6,7 @@ Automated pipeline for producing professional, editorial-quality PDF reports fro
 ## Architecture
 - HTML templates + print-optimized CSS → rendered to PDF
 - Python CLI orchestrator in `/src`
-- Data input: raw files (markdown, documents, images, data files) in a project folder → Content Agent structures into JSON → injected into templates
+- Data input: raw files (markdown, documents, images, data files) in a project folder → Content Agent structures into markdown with YAML frontmatter → injected into templates
 - Tool selection is flexible — agents choose the best libraries for templating, rendering, and conversion
 
 ## File Structure
@@ -59,7 +59,7 @@ The main agent acts as the loop controller. It spawns subagents via `Task` calls
 **Stage 0 — Cleanup**
 - Main agent handles directly — no subagent
 - Delete all contents of `output/` (stale HTML, PDF, QA reports, screenshots)
-- Delete `data/content.json` if it exists (stale Content Agent output)
+- Delete `data/content.md` if it exists (stale Content Agent output)
 - Do NOT delete other files in `data/` — those are raw source input
 - Write `.report-in-progress` flag file
 - This ensures the stop hook and QA loop start from a clean state
@@ -68,12 +68,12 @@ The main agent acts as the loop controller. It spawns subagents via `Task` calls
 - Spawn via `Task` with `subagent_type: "general-purpose"`, `mode: "bypassPermissions"`
 - Prompt: full contents of `.claude/agents/content/content.md` + the task-specific instructions
 - Input: all files in the `data/` folder (markdown, documents, images, data files). The main agent lists the folder contents and passes the file paths in the prompt.
-- Output: agent writes `data/content.json`
+- Output: agent writes `data/content.md`
 
 **Stage 2 — Design Agent**
 - Spawn via `Task` with `subagent_type: "general-purpose"`, `mode: "bypassPermissions"`
 - Prompt: full contents of `.claude/agents/design/design.md` + the task-specific instructions
-- Input: `data/content.json` + any image files in project root (`*.png`)
+- Input: `data/content.md` + any image files in project root (`*.png`)
 - Output: agent writes `output/report.html` (complete HTML with embedded CSS)
 
 **Stage 3 — PDF Render**
@@ -96,7 +96,7 @@ After Stage 4, the main agent reads `output/qa-report.json` and follows this log
 iteration = 1
 
 cleanup:
-  delete output/* and data/content.json
+  delete output/* and data/content.md
   write .report-in-progress
 
 loop:
