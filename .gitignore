@@ -1,0 +1,6 @@
+.report-in-progress
+data/
+output/
+.playwright-mcp/
+__pycache__/
+*.pyc
