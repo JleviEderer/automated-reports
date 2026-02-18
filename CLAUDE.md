@@ -16,6 +16,10 @@ Automated pipeline for producing professional, editorial-quality PDF reports fro
 │   ├── content/content.md       # Content writing agent
 │   ├── design/design.md         # HTML/CSS design agent
 │   └── QA/qa.md                 # QA validation agent
+├── presets/                # Report type presets (YAML)
+│   ├── consultant-report.yaml   # Default — editorial, restrained
+│   ├── marketing-report.yaml    # Persuasive, brand-forward
+│   └── internal-memo.yaml       # Functional, direct
 ├── src/                    # Python orchestration
 ├── templates/              # HTML templates
 ├── styles/                 # Print CSS
@@ -24,13 +28,46 @@ Automated pipeline for producing professional, editorial-quality PDF reports fro
 └── fonts/                  # Local font files (optional)
 ```
 
-## Design Principles (All Agents Must Follow)
+## Design Principles (Defaults — Presets Can Override)
 - Serif body fonts (Georgia, Garamond, Libre Baskerville). Never Inter, Roboto, Arial, or system fonts.
-- Max 3 colors per report (including black). One muted accent color used sparingly.
+- Max 3 colors per report (including black). One muted accent color used sparingly. Presets may adjust the limit.
 - Generous margins (≥1 inch). Whitespace is a design element.
 - Prose-first. Bullet lists max 3–5 items, max 2 lists per page. Default to paragraphs.
 - No AI tells: no "It's worth noting," no filler, no hedging, no monotonous structure.
 - Every report passes the "screenshot test" — no one would guess AI made it.
+
+## Presets
+
+Report type presets live in `presets/*.yaml`. Each preset defines per-agent overrides for tone, structure, aesthetics, and QA thresholds. The pipeline mechanics (Content → Design → PDF → QA → loop) are universal — only the instructions each agent receives change by type.
+
+**Available presets:**
+- `consultant-report` (default) — Analytical, editorial, restrained. McKinsey meets Monocle.
+- `marketing-report` — Persuasive, brand-forward, bolder accent colors.
+- `internal-memo` — Functional, direct, minimal styling.
+
+**How presets are injected:** The orchestrator reads the preset YAML and inserts a `## Report Type Constraints` block into each agent spawn prompt, between the base agent `.md` and the task instructions. See the Spawning Template below.
+
+**Preset YAML structure:**
+```yaml
+name: "Preset Name"
+description: "One-line description"
+content:    # Injected into Content Agent spawns
+  tone: ...
+  structure: ...
+  frontmatter_note: ...
+design:     # Injected into Design Agent spawns
+  aesthetic: ...
+  accent_color: ...
+  fonts: { body: ..., headings: ... }
+  body_size: ...
+  cover: ...
+  columns: ...
+qa:         # Injected into QA Agent spawns
+  body_size_range: ...
+  max_colors: ...
+  screenshot_test: ...
+  type_specific_notes: ...
+```
 
 ## Iterative Quality Loop
 This is a loop, not a linear pipeline. No report ships until QA passes.
@@ -80,12 +117,24 @@ The main agent acts as the loop controller. It spawns subagents via `Task` calls
 - Main agent handles directly — no subagent
 - Serve `output/report.html` via `python -m http.server` (Bash, background)
 - Use Playwright MCP `browser_navigate` to open the page, then `browser_run_code` with `page.pdf()` to render
+- **Before calling `page.pdf()`**, verify all images are loaded. Use `page.wait_for_function` to check that every `<img>` element has `naturalWidth > 0` and `complete === true`. Do not rely on a fixed timeout — large images can take longer than 3 seconds.
 - Output: `output/report.pdf`
+- After rendering the PDF, extract per-page screenshots using Python:
+  ```python
+  # Using pymupdf (fitz):
+  import fitz
+  doc = fitz.open('output/report.pdf')
+  for i, page in enumerate(doc):
+      pix = page.get_pixmap(dpi=150)
+      pix.save(f'output/page-{i+1}.png')
+  ```
+- If pymupdf is not available, use Playwright to open the PDF in the browser and screenshot each page
+- Pass these per-page screenshot paths to the QA Agent in Stage 4
 
 **Stage 4 — QA Agent**
 - Spawn via `Task` with `subagent_type: "general-purpose"`, `mode: "bypassPermissions"`
 - Prompt: full contents of `.claude/agents/QA/qa.md` + the task-specific instructions
-- Input: `output/report.html` + screenshots (use `browser_take_screenshot` before spawning)
+- Input: `output/report.html` + per-page PDF screenshots (`output/page-*.png`) + viewport screenshots (use `browser_take_screenshot` before spawning)
 - Output: agent writes `output/qa-report.json` AND `output/qa-report.md`
 
 ### QA Loop Logic
@@ -131,7 +180,7 @@ When re-spawning an agent with feedback, the prompt must include:
 
 ### Spawning Template
 
-Every `Task` call follows this pattern:
+Every `Task` call follows this pattern. The preset block is injected between the base prompt and task instructions:
 
 ```
 Task(
@@ -139,6 +188,9 @@ Task(
   mode: "bypassPermissions",
   prompt: """
     <full contents of .claude/agents/{agent}/agent.md>
+
+    ## Report Type Constraints
+    <contents of preset[agent_key] from the active preset YAML>
 
     ## Task
     <task-specific instructions, input/output paths>
@@ -149,6 +201,8 @@ Task(
   """
 )
 ```
+
+The `agent_key` maps to the preset YAML section: `content` for Content Agent, `design` for Design Agent, `qa` for QA Agent.
 
 ### Stop Hook Safety Net
 
@@ -173,6 +227,7 @@ Always include in stylesheets:
 ## Commands
 ```bash
 python src/generate.py --data data/ --template report --output output/report.pdf
+python src/generate.py --data data/ --template report --output output/report.pdf --preset marketing-report
 python src/generate.py --data data/ --template report --preview  # HTML preview
 python src/validate.py output/report.pdf  # QA only
 python src/generate.py --data data/ --template report --output output/report.pdf --iterate  # Full loop

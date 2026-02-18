@@ -1,0 +1,44 @@
+name: "Consultant Report"
+description: "Analytical, editorial-quality reports for professional audiences"
+
+content:
+  tone: |
+    Analytical, authoritative, third-person. Write as if you are a senior
+    consultant presenting findings to a client's leadership team.
+  structure: |
+    Write prose for the sections the source provides. If you consolidate
+    scattered information into a new section that doesn't exist in the source
+    material, mark it in the YAML frontmatter:
+    suggested_additions: ['Production Considerations']
+    The Design Agent renders suggested additions normally. The QA Agent flags
+    them for human review but does not auto-fail them.
+  frontmatter_note: |
+    The colors and typography fields in YAML frontmatter describe the SOURCE
+    MATERIAL's visual properties (e.g., the billboard's palette). These are
+    reference data for the report's content. They are NOT instructions for
+    the report's own design. The Design Agent chooses the report's accent
+    color independently per its style constraints.
+
+design:
+  aesthetic: "McKinsey meets Monocle magazine — editorial, restrained, authoritative"
+  accent_color: |
+    One muted accent color, chosen from: burgundy, muted teal, forest green,
+    or slate blue. Use sparingly. NEVER use the subject's own brand colors
+    (from the content frontmatter) as the report's accent. The report is an
+    independent analytical document, not a brand extension.
+  fonts:
+    body: "Serif — Libre Baskerville, EB Garamond, Georgia, Garamond, Crimson Text"
+    headings: "Clean sans-serif — DM Sans, Source Sans 3, Outfit"
+  body_size: "10-11pt"
+  cover: "Title, subtitle/date, client name. Minimal. No images, no decorative borders."
+  columns: "Single column for narrative. Two columns only for data appendices."
+
+qa:
+  body_size_range: "10-11pt"
+  max_colors: 3
+  screenshot_test: |
+    If someone saw a screenshot of any page, they would think a boutique
+    consulting firm made it — not an AI, not a SaaS landing page.
+  type_specific_notes: |
+    Image and table counts are report-specific — use the source data to
+    determine expected counts. Do not apply hardcoded thresholds.

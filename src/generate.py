@@ -1,13 +1,14 @@
 """
-PDF Report Generator — Colbert Cooper Hill Billboard Analysis
+PDF Report Generator
 
-Generates HTML reports from structured JSON data and converts to PDF
+Generates HTML reports from source data and converts to PDF
 using Playwright for high-fidelity CSS rendering.
 
 Usage:
-    python src/generate.py --data data/input.json --template report --output output/report.pdf
-    python src/generate.py --data data/input.json --template report --preview
-    python src/generate.py --data data/input.json --template report --output output/report.pdf --iterate
+    python src/generate.py --data data/ --template report --output output/report.pdf
+    python src/generate.py --data data/ --template report --preview
+    python src/generate.py --data data/ --template report --output output/report.pdf --iterate
+    python src/generate.py --data data/ --template report --output output/report.pdf --preset marketing-report
 """
 
 import argparse
@@ -16,24 +17,47 @@ import subprocess
 import sys
 from pathlib import Path
 
+try:
+    import yaml
+except ImportError:
+    yaml = None
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
+def load_preset(preset_name: str) -> dict:
+    """Load a report type preset from the presets/ directory."""
+    preset_path = PROJECT_ROOT / "presets" / f"{preset_name}.yaml"
+    if not preset_path.exists():
+        print(f"Error: Preset not found: {preset_path}", file=sys.stderr)
+        available = [p.stem for p in (PROJECT_ROOT / "presets").glob("*.yaml")]
+        print(f"Available presets: {', '.join(available)}", file=sys.stderr)
+        sys.exit(1)
+
+    if yaml is None:
+        # Fallback: read raw text if PyYAML not installed
+        print("Warning: PyYAML not installed. Preset loaded as raw text.", file=sys.stderr)
+        return {"_raw": preset_path.read_text(encoding="utf-8")}
+
+    with open(preset_path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
 def load_data(data_path: str) -> dict:
-    """Load and validate the JSON data file."""
+    """Load and validate the data directory or JSON file."""
     path = PROJECT_ROOT / data_path
     if not path.exists():
-        print(f"Error: Data file not found: {path}", file=sys.stderr)
+        print(f"Error: Data path not found: {path}", file=sys.stderr)
         sys.exit(1)
 
+    # If it's a directory, list its contents and return metadata
+    if path.is_dir():
+        files = [f.name for f in path.iterdir() if f.is_file()]
+        return {"_data_dir": str(path), "_files": files}
+
+    # If it's a JSON file, load it (no hardcoded required keys)
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
-
-    required_keys = ["report", "executive_summary", "variants", "recommendation"]
-    missing = [k for k in required_keys if k not in data]
-    if missing:
-        print(f"Error: Missing required keys in data: {missing}", file=sys.stderr)
-        sys.exit(1)
 
     return data
 
@@ -165,12 +189,18 @@ def main():
     parser.add_argument("--output", help="Output PDF path (relative to project root)")
     parser.add_argument("--preview", action="store_true", help="Generate HTML preview only, skip PDF")
     parser.add_argument("--iterate", action="store_true", help="Run full QA loop (max 3 iterations)")
+    parser.add_argument("--preset", default="consultant-report", help="Report type preset (default: consultant-report)")
 
     args = parser.parse_args()
 
+    # Load preset
+    preset = load_preset(args.preset)
+    print(f"Preset loaded: {preset.get('name', args.preset)}")
+
     # Load and validate data
     data = load_data(args.data)
-    print(f"Data loaded: {len(data.get('variants', []))} variants")
+    file_count = len(data.get("_files", [])) if "_files" in data else len(data)
+    print(f"Data loaded: {file_count} items")
 
     # Generate HTML
     html_path = generate_html(args.data, args.template)

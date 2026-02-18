@@ -132,19 +132,18 @@ def validate_html(html_path: Path) -> dict:
     if "cover" not in content_lower:
         issues.append("STRUCTURE: No cover page detected")
 
-    # Check for images (billboard variants)
+    # Check for images — count is report-specific, just report the number
     img_count = content.count("<img")
-    if img_count < 5:
-        issues.append(f"STRUCTURE: Only {img_count} images found. Expected 5+ (billboard variants + logo)")
+    if img_count == 0:
+        notes.append("STRUCTURE: No images found. Verify this is expected for the report type.")
 
-    # Check for figure captions
+    # Check for figure captions on images that exist
     figcaption_count = content.count("<figcaption")
-    if figcaption_count < 5:
-        notes.append(f"STRUCTURE: {figcaption_count} figure captions found. Expected 5 (one per variant).")
+    if img_count > 0 and figcaption_count == 0:
+        notes.append(f"STRUCTURE: {img_count} images but no figure captions found. Images should have captions.")
 
-    # Check for table
-    if "<table" not in content:
-        notes.append("STRUCTURE: No comparison table found. Expected comparative matrix.")
+    # Tables are optional — just note presence for context
+    table_count = content.count("<table")
 
     # === THE SCREENSHOT TEST ===
     # Heuristic: check for variety in CSS classes (indicates design effort)
@@ -167,6 +166,7 @@ def validate_html(html_path: Path) -> dict:
         "stats": {
             "images": img_count,
             "figure_captions": figcaption_count,
+            "tables": table_count,
             "list_groups": list_groups,
             "list_items": list_items,
             "h2_sections": h2_count,

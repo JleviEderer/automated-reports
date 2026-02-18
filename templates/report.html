@@ -30,12 +30,17 @@
      1. EXECUTIVE SUMMARY
      ================================================================ -->
 <div class="section">
-  <span class="section-number">Section One</span>
-  <h1 class="section-title">Executive Summary</h1>
-  <hr class="section-rule">
+  <div class="section-header-group">
+    <span class="section-number">Section One</span>
+    <h1 class="section-title">Executive Summary</h1>
+    <hr class="section-rule">
+    {% if executive_summary|length > 0 %}
+    <p class="lead">{{ executive_summary[0] }}</p>
+    {% endif %}
+  </div>
 
   <div class="exec-summary">
-    {% for paragraph in executive_summary %}
+    {% for paragraph in executive_summary[1:] %}
     <p>{{ paragraph }}</p>
     {% endfor %}
   </div>
@@ -43,12 +48,17 @@
 
 
 <!-- ================================================================
-     2. THE DESIGN STRATEGY
+     2. DESIGN PRINCIPLES
      ================================================================ -->
-<div class="section section-break">
-  <span class="section-number">Section Two</span>
-  <h1 class="section-title">The Design Strategy</h1>
-  <hr class="section-rule">
+<hr class="section-divider">
+
+<div class="section">
+  <div class="section-header-group">
+    <span class="section-number">Section Two</span>
+    <h1 class="section-title">Design Principles</h1>
+    <hr class="section-rule">
+    <p>{{ design_strategy_intro }}</p>
+  </div>
 
   <!-- Lead principle: featured/callout treatment -->
   {% if design_strategy|length > 0 %}
@@ -93,16 +103,24 @@
 <!-- ================================================================
      3. VARIANT-BY-VARIANT ANALYSIS
      ================================================================ -->
-<div class="section section-break">
-  <span class="section-number">Section Three</span>
-  <h1 class="section-title">Variant Analysis</h1>
-  <hr class="section-rule">
+<hr class="section-divider">
+
+<div class="section">
+  <div class="section-header-group">
+    <span class="section-number">Section Three</span>
+    <h1 class="section-title">Variant Analysis</h1>
+    <hr class="section-rule">
+    <p>{{ variants_intro }}</p>
+  </div>
 
   {% for variant in variants %}
   <div class="variant">
-    <div class="variant-header">
-      <span class="variant-tag{% if variant.recommended %} recommended{% endif %}">{{ variant.id }}</span>
-      <h2>{{ variant.name }}</h2>
+    <div class="variant-header-group">
+      <div class="variant-header">
+        <span class="variant-tag{% if variant.recommended %} recommended{% endif %}">{{ variant.id }}</span>
+        <h2>{{ variant.name }}</h2>
+      </div>
+      <p>{{ variant.paragraphs[0] }}</p>
     </div>
 
     <figure class="variant-image-frame">
@@ -111,7 +129,7 @@
     </figure>
 
     <div class="variant-body">
-      {% for p in variant.paragraphs %}
+      {% for p in variant.paragraphs[1:] %}
       <p>{{ p }}</p>
       {% endfor %}
     </div>
@@ -124,12 +142,15 @@
 <!-- ================================================================
      4. COMPARATIVE MATRIX
      ================================================================ -->
-<div class="section section-break">
-  <span class="section-number">Section Four</span>
-  <h1 class="section-title">Comparative Evaluation</h1>
-  <hr class="section-rule">
+<hr class="section-divider">
 
-  <p>{{ comparative_intro }}</p>
+<div class="section">
+  <div class="section-header-group">
+    <span class="section-number">Section Four</span>
+    <h1 class="section-title">Comparative Evaluation</h1>
+    <hr class="section-rule">
+    <p>{{ comparative_intro }}</p>
+  </div>
 
   <table class="comp-table">
     <thead>
@@ -163,12 +184,15 @@
 <!-- ================================================================
      5. DISTANCE READABILITY
      ================================================================ -->
-<div class="section section-break">
-  <span class="section-number">Section Five</span>
-  <h1 class="section-title">Distance Readability</h1>
-  <hr class="section-rule">
+<hr class="section-divider">
 
-  <p style="margin-bottom: 1.5rem;">{{ distance_intro }}</p>
+<div class="section">
+  <div class="section-header-group">
+    <span class="section-number">Section Five</span>
+    <h1 class="section-title">Distance Readability</h1>
+    <hr class="section-rule">
+    <p>{{ distance_intro }}</p>
+  </div>
 
   {% for entry in distance_readability %}
   <div class="distance-row">
@@ -176,18 +200,16 @@
     <p class="distance-desc">{{ entry.description }}</p>
   </div>
   {% endfor %}
-
-  <p class="distance-closing">{{ distance_closing }}</p>
 </div>
 
 
 <!-- ================================================================
-     6. RECOMMENDATIONS
+     6. RECOMMENDATIONS — LIGHTER HEADING TREATMENT
      ================================================================ -->
-<div class="section section-break">
-  <span class="section-number">Section Six</span>
-  <h1 class="section-title">Recommendations</h1>
-  <hr class="section-rule">
+<hr class="section-divider">
+
+<div class="section section-light">
+  <h2>Recommendations</h2>
 
   <div class="tier tier-1">
     <span class="tier-label">{{ recommendation.tier1.label }}</span>
@@ -213,17 +235,17 @@
 
 
 <!-- ================================================================
-     7. APPENDIX
+     7. APPENDIX — LIGHTER HEADING TREATMENT
      ================================================================ -->
-<div class="section section-break">
-  <span class="section-number">Appendix</span>
-  <h1 class="section-title">Technical Reference</h1>
-  <hr class="section-rule">
+<hr class="section-divider">
+
+<div class="section section-light">
+  <h2>Appendix</h2>
 
   <div class="appendix-grid">
 
     <div class="appendix-block">
-      <h3>Billboard Color Palette</h3>
+      <h3>Colors</h3>
       {% for color in appendix.colors %}
       <div class="swatch-row">
         <div class="swatch" style="background: {{ color.hex }};{% if color.hex == '#FFFFFF' %} border: 1px solid #ccc;{% endif %}"></div>
@@ -233,7 +255,7 @@
     </div>
 
     <div class="appendix-block">
-      <h3>Typography Notes</h3>
+      <h3>Typography</h3>
       <ul class="typo-notes">
         {% for note in appendix.typography %}
         <li>{{ note }}</li>
@@ -242,7 +264,7 @@
     </div>
 
     <div class="appendix-block full-width">
-      <h3>Image Inventory</h3>
+      <h3>Images</h3>
       <table class="inv-table">
         {% for img in appendix.images %}
         <tr><td>{{ img.file }}</td><td>{{ img.description }}</td></tr>

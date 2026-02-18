@@ -1,0 +1,33 @@
+name: "Internal Memo"
+description: "Functional, direct reports for internal audiences"
+
+content:
+  tone: |
+    Direct, concise, action-oriented. Write for busy internal stakeholders
+    who need the key points fast. Skip preambles. Lead with conclusions.
+  structure: |
+    Executive summary up front, then supporting details. Bullet lists are
+    acceptable for action items and key findings. Keep sections short.
+  frontmatter_note: |
+    Frontmatter colors describe the source material. The memo itself uses
+    minimal styling — no brand colors needed.
+
+design:
+  aesthetic: "Clean, functional, no-nonsense — like a well-formatted internal document"
+  accent_color: |
+    Slate blue or muted gray. Minimal color use. The document should feel
+    functional, not designed.
+  fonts:
+    body: "Serif or clean sans-serif at 11pt"
+    headings: "Same family as body, just bolder/larger"
+  body_size: "11pt"
+  cover: "Title, date, author, distribution list. No decorative elements."
+  columns: "Single column only."
+
+qa:
+  body_size_range: "10-12pt"
+  max_colors: 2
+  screenshot_test: |
+    Looks like a well-formatted internal document from a professional
+    organization. Clean and functional, not flashy.
+  type_specific_notes: ""

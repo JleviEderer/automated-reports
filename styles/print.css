@@ -1,8 +1,11 @@
 /* ============================================================
-   WolfPack Billboard Report — Print-Optimized Stylesheet
+   WolfPack Billboard Report -- Print-Optimized Stylesheet
    Design: EB Garamond (body) + DM Sans (headings/UI)
-   Palette: Deep navy text (#1a2332) + Burgundy accent (#7B2D3B)
+   Palette: Slate blue #4a6580 accent + Charcoal body
    ============================================================ */
+
+/* --- Google Fonts Import --- */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
 
 /* --- Page Setup --- */
 @page {
@@ -47,7 +50,7 @@ body {
   font-family: 'EB Garamond', 'Georgia', 'Times New Roman', serif;
   font-size: 11pt;
   line-height: 1.6;
-  color: #1a2332;
+  color: #2d3436;
   background: #fff;
   -webkit-font-smoothing: antialiased;
   -webkit-print-color-adjust: exact;
@@ -56,18 +59,18 @@ body {
 
 /* --- CSS Variables --- */
 :root {
+  --accent: #4a6580;
+  --accent-dark: #3a5269;
+  --accent-pale: #e8eef3;
   --navy: #1a2332;
   --navy-light: #2c3e5a;
-  --burgundy: #7B2D3B;
-  --burgundy-light: #a14054;
-  --burgundy-pale: #f3e8eb;
-  --text-primary: #1a2332;
+  --text-primary: #2d3436;
   --text-secondary: #4a5568;
   --text-muted: #718096;
   --bg-warm: #faf9f7;
-  --bg-cream: #f7f5f0;
-  --border-light: #e8e4de;
-  --border-subtle: #f0ece6;
+  --bg-cream: #f5f3ef;
+  --border-light: #e2ded7;
+  --border-subtle: #edeae5;
   --rule-color: #d4cfc7;
   --max-width: 6.5in;
 }
@@ -86,16 +89,16 @@ body {
 }
 
 .cover-logo {
-  width: 200px;
+  width: 220px;
   height: auto;
   margin-bottom: 2.5rem;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 .cover-rule {
   width: 60px;
   height: 3px;
-  background: var(--burgundy);
+  background: var(--accent);
   border: none;
   margin: 0 0 2rem;
 }
@@ -136,9 +139,9 @@ body {
 .cover-meta .date-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  border: 1px solid var(--burgundy);
-  color: var(--burgundy);
-  font-weight: 500;
+  border: 1.5px solid var(--accent);
+  color: var(--accent-dark);
+  font-weight: 600;
 }
 
 
@@ -161,7 +164,7 @@ h1.section-title {
   font-family: 'DM Sans', sans-serif;
   font-size: 10pt;
   font-weight: 500;
-  color: var(--burgundy);
+  color: var(--accent);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   display: block;
@@ -171,9 +174,25 @@ h1.section-title {
 .section-rule {
   width: 40px;
   height: 2px;
-  background: var(--burgundy);
+  background: var(--accent);
   border: none;
   margin: 1rem 0 1.75rem;
+}
+
+/* CRITICAL: Heading Protection Group
+   Wraps section number + title + decorative rule + first paragraph
+   to prevent orphaned headings at bottom of page */
+.section-header-group {
+  page-break-inside: avoid;
+}
+
+/* Visual section divider -- replaces forced page breaks */
+.section-divider {
+  width: 100%;
+  height: 0;
+  border: none;
+  border-top: 1px solid var(--rule-color);
+  margin: 2.5rem 0 2rem;
 }
 
 h2 {
@@ -202,7 +221,7 @@ h4 {
   font-family: 'DM Sans', sans-serif;
   font-size: 10pt;
   font-weight: 600;
-  color: var(--burgundy);
+  color: var(--accent);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   line-height: 1.3;
@@ -236,14 +255,10 @@ em {
 
 
 /* ==========================================================
-   NEW SECTION SPACING
+   SECTION SPACING -- NO FORCED PAGE BREAKS
    ========================================================== */
 .section {
   margin-bottom: 2.5rem;
-}
-
-.section-break {
-  page-break-before: always;
 }
 
 
@@ -267,7 +282,7 @@ em {
 
 
 /* ==========================================================
-   DESIGN STRATEGY — subsection treatments
+   DESIGN STRATEGY -- subsection treatments
    ========================================================== */
 .strategy-intro {
   margin-bottom: 2rem;
@@ -280,7 +295,7 @@ em {
 
 .principle-featured {
   padding: 1.5rem 0 1.5rem 1.5rem;
-  border-left: 3px solid var(--burgundy);
+  border-left: 3px solid var(--accent);
   margin-bottom: 2rem;
   page-break-inside: avoid;
 }
@@ -288,7 +303,7 @@ em {
 .principle-featured h3 {
   margin-top: 0;
   font-size: 14pt;
-  color: var(--burgundy);
+  color: var(--navy);
 }
 
 .principle-featured p {
@@ -363,6 +378,11 @@ em {
   page-break-inside: auto;
 }
 
+/* Variant heading group: tag + title + first paragraph kept together */
+.variant-header-group {
+  page-break-inside: avoid;
+}
+
 .variant-header {
   display: flex;
   align-items: baseline;
@@ -376,7 +396,7 @@ em {
   font-size: 9pt;
   font-weight: 700;
   color: #fff;
-  background: var(--burgundy);
+  background: var(--navy);
   padding: 0.2rem 0.6rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -385,7 +405,16 @@ em {
 }
 
 .variant-tag.recommended {
-  background: var(--navy);
+  background: var(--accent);
+  color: #fff;
+}
+
+.variant-tag.recommended::after {
+  content: " (recommended)";
+  font-weight: 500;
+  font-size: 8pt;
+  letter-spacing: 0.02em;
+  text-transform: none;
 }
 
 .variant-header h2 {
@@ -399,8 +428,8 @@ em {
 }
 
 .variant-image-frame img {
-  width: 90%;
-  max-width: 100%;
+  width: 80%;
+  max-width: 80%;
   height: auto;
   display: block;
   border: 1px solid var(--border-light);
@@ -454,7 +483,7 @@ em {
 }
 
 .comp-table thead th.highlight {
-  color: var(--burgundy);
+  color: var(--accent);
 }
 
 .comp-table tbody td {
@@ -476,7 +505,7 @@ em {
   border-bottom: 2px solid var(--navy);
 }
 
-/* Rating pills — single-hue burgundy scale */
+/* Rating pills -- navy-blue tonal scale */
 .pill {
   display: inline-block;
   padding: 0.1rem 0.5rem;
@@ -487,12 +516,12 @@ em {
   border-radius: 2px;
 }
 
-.pill-excellent { background: #7B2D3B; color: #fff; }
-.pill-strong    { background: #a14054; color: #fff; }
-.pill-good      { background: #c4727f; color: #fff; }
-.pill-moderate  { background: #dba6ad; color: #4a2028; }
-.pill-weak      { background: #f3e8eb; color: #7B2D3B; }
-.pill-flawed    { background: #f3e8eb; color: #7B2D3B; }
+.pill-excellent { background: var(--navy); color: #fff; }
+.pill-strong    { background: var(--navy-light); color: #fff; }
+.pill-good      { background: #6b7d96; color: #fff; }
+.pill-moderate  { background: #b0bec5; color: #2d3436; }
+.pill-weak      { background: #e2ded7; color: var(--navy); }
+.pill-flawed    { background: #e2ded7; color: var(--navy); }
 
 .comp-summary {
   margin-top: 1.5rem;
@@ -524,7 +553,7 @@ em {
   font-family: 'DM Sans', sans-serif;
   font-size: 13pt;
   font-weight: 700;
-  color: var(--burgundy);
+  color: var(--navy);
   white-space: nowrap;
   min-width: 120px;
   flex-shrink: 0;
@@ -538,17 +567,16 @@ em {
   margin-bottom: 0;
 }
 
-.distance-closing {
-  margin-top: 1.25rem;
-  font-size: 10.5pt;
-  line-height: 1.65;
-  color: var(--text-secondary);
-}
-
 
 /* ==========================================================
-   RECOMMENDATIONS
+   RECOMMENDATIONS — LIGHTER HEADING
    ========================================================== */
+.section-light h2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+  page-break-after: avoid;
+}
+
 .tier {
   margin-bottom: 2rem;
   page-break-inside: avoid;
@@ -565,8 +593,8 @@ em {
 }
 
 .tier-1 .tier-label {
-  color: var(--burgundy);
-  border-bottom: 2px solid var(--burgundy);
+  color: var(--navy);
+  border-bottom: 2px solid var(--accent);
   padding-bottom: 0.15rem;
 }
 
@@ -586,7 +614,7 @@ em {
 }
 
 .closing-note {
-  border-left: 3px solid var(--burgundy);
+  border-left: 3px solid var(--accent);
   padding: 1rem 0 1rem 1.5rem;
   margin-top: 2rem;
   page-break-inside: avoid;
@@ -595,7 +623,7 @@ em {
 .closing-note h3 {
   margin-top: 0;
   font-size: 13pt;
-  color: var(--burgundy);
+  color: var(--navy);
   margin-bottom: 0.5rem;
 }
 
@@ -653,9 +681,9 @@ em {
 }
 
 .swatch-info .hex {
-  font-family: 'Courier New', monospace;
   font-size: 9pt;
   color: var(--text-muted);
+  font-style: italic;
 }
 
 /* Typography notes */
@@ -690,7 +718,7 @@ em {
 }
 
 .inv-table td:first-child {
-  font-family: 'Courier New', monospace;
+  font-family: 'DM Sans', sans-serif;
   font-size: 9pt;
   color: var(--navy);
   font-weight: 600;
@@ -738,6 +766,11 @@ h1, h2, h3, h4 {
   page-break-after: avoid;
 }
 
+.section-header-group,
+.variant-header-group {
+  page-break-inside: avoid;
+}
+
 .variant-image-frame,
 .comp-table,
 .tier,
@@ -779,9 +812,5 @@ p, li {
 @media print {
   body {
     background: #fff;
-  }
-
-  .section-break {
-    page-break-before: always;
   }
 }

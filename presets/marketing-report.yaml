@@ -1,0 +1,33 @@
+name: "Marketing Report"
+description: "Persuasive, brand-forward reports for external audiences"
+
+content:
+  tone: |
+    Persuasive, benefit-driven, reader-centric. Lead with outcomes and value.
+    Shorter sentences. More direct. Calls to action where appropriate.
+  structure: |
+    Problem/opportunity -> solution -> evidence -> call to action.
+    Can use bold takeaways and pull quotes more liberally.
+    Bullet lists are acceptable when they clarify benefits.
+  frontmatter_note: |
+    The content frontmatter colors may be used to inform the report's visual
+    identity when the report is brand-aligned with the subject.
+
+design:
+  aesthetic: "Modern editorial — polished, approachable, brand-forward"
+  accent_color: |
+    The client's primary brand color is acceptable as the accent. Can be
+    bolder than in consultant reports. Still max one accent used sparingly.
+  fonts:
+    body: "Serif preferred but clean sans-serif also acceptable at 11-12pt"
+    headings: "Display-weight sans-serif for impact"
+  body_size: "11-12pt"
+  cover: "Can include a hero element, tagline, or key visual. More dynamic layout."
+  columns: "Two columns acceptable for feature sections."
+
+qa:
+  body_size_range: "11-12pt"
+  max_colors: 4
+  screenshot_test: |
+    Looks like a polished pitch deck or brand-forward editorial publication.
+  type_specific_notes: ""
