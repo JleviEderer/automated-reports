@@ -4,3 +4,12 @@ output/
 .playwright-mcp/
 __pycache__/
 *.pyc
+
+# Source documents (not pipeline code)
+*.pdf
+*.docx
+*.xlsx
+*.pptx
+~$*
+nul
+fonts/

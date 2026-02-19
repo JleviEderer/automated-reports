@@ -139,6 +139,24 @@
 
 **Key takeaway:** The napkin-driven iteration loop works. Three runs progressively fixed: cover quality (static→marketing-grade), text walls (prose-only→stat callouts+cards), trapped whitespace (heavy headers→lighter treatment), and page count (18→19→16). All without modifying agent `.md` files — just injecting accumulated lessons into the Design Agent prompt.
 
+### Run 8 (Marketing Report — standalone /run)
+**Result: PASS WITH NOTES (13 pages, 1 iteration — clean first-pass QA)**
+- Preset: marketing-report. Deep navy (#1a2332) + gold (#C8A55A) accent. DM Sans headings + Libre Baskerville body.
+- Clean first-pass QA — no FAIL iterations needed. All accumulated napkin lessons applied correctly.
+- 13 pages — shortest marketing report yet (vs 18→19→16 in Runs 5-7).
+- 7 stat callouts, 2 pull quotes, 2 two-column card grids. Good visual variety.
+- Two suggested additions flagged: "The Collateral Revolution" and "Why Incumbents Cannot Replicate This."
+- Page 13 final page ~30% filled (exempt). Bullet list on p12 at max 5 items (acceptable).
+- All data integrity checks passed — manifest conflict resolutions correctly followed.
+- No orphaned headings, no density failures, no text walls.
+- Port management: killed stale python processes before starting server. Used port 8770.
+
+**What worked well:**
+- Injecting accumulated design lessons directly into the Design Agent prompt continues to produce first-pass QA passes.
+- 13 pages is notably compact for the same source material that produced 18 pages in Run 5. The lighter-headings-in-final-third rule and continuous flow are well internalized.
+- Cover maintained marketing-grade quality with key stats, gold tagline, ABX:TSX eyebrow.
+- Source Manifest Agent handled all 21 files cleanly in subagent (39 metrics, 5 conflicts).
+
 ## Graduation Queue
 - Stage 0.5 → subagent: promoted to CLAUDE.md + new agent prompt at `.claude/agents/manifest/manifest.md`
 

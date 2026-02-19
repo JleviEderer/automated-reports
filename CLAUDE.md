@@ -235,61 +235,11 @@ Always include in stylesheets:
 
 ## Quick Commands
 
-These are shorthand triggers the main agent recognizes as pipeline commands. When the user types one of these, execute the corresponding pipeline behavior immediately — no clarification needed.
+Pipeline commands live in `.claude/commands/` and are invoked via slash:
+- `/run <preset> [--design-only]` — single pipeline pass with QA loop
+- `/polish <preset> [--design-only]` — 3-run self-improvement loop with napkin-driven learning
 
-### `/run <preset> [--design-only]`
-
-Single pipeline pass with QA loop. Produces one finished PDF.
-
-```
-/run marketing-report          # Full pipeline: Stage 0 → 0.5 → 1 → 2 → 3 → 4 → QA loop
-/run consultant-report         # Same, with consultant preset
-/run marketing-report --design-only  # Skip Stage 0.5 and Stage 1 (reuse existing content.md)
-```
-
-**Behavior:**
-1. Read the preset from `presets/<preset>.yaml`
-2. Run Stage 0 (cleanup) — always runs
-3. If `--design-only`: skip Stage 0.5 and Stage 1, verify `data/content.md` exists (error if missing). Stage 0 cleanup must NOT delete `data/content.md` or `data/source-manifest.yaml` when `--design-only` is set.
-4. Otherwise: run Stage 0.5 (Source Manifest) → Stage 1 (Content Agent)
-5. Run Stage 2 (Design Agent) → Stage 3 (PDF Render) → Stage 4 (QA Agent)
-6. Enter QA loop (max 3 iterations) per the Iterative Quality Loop rules above
-7. Ship final PDF to user
-
-Default preset if omitted: `consultant-report`.
-
-### `/polish <preset> [--design-only]`
-
-3-run self-improvement loop. Runs the Design Agent forward 3 times, self-reviewing screenshots between runs and writing observations to the napkin. Does NOT modify agent `.md` files — all learning stays in `.claude/napkin.md`.
-
-```
-/polish marketing-report          # Full pipeline × 3 with self-review
-/polish consultant-report         # Same, with consultant preset
-/polish marketing-report --design-only  # Skip Stage 0.5 and Stage 1 on all 3 runs
-```
-
-**Behavior:**
-1. Read the preset from `presets/<preset>.yaml`
-2. For each run (1 of 3, 2 of 3, 3 of 3):
-   a. Run the `/run` pipeline (with `--design-only` if specified)
-   b. After QA passes (or max iterations reached), review the per-page screenshots (`output/page-*.png`)
-   c. Write observations to `.claude/napkin.md` under a new run heading — what worked, what didn't, specific page-level notes
-   d. For runs 2 and 3: inject the napkin observations from previous runs into the Design Agent prompt as additional context (append after the preset block, before task instructions). This is how the Design Agent improves across runs without modifying its `.md` file.
-   e. Archive the previous run's output before starting the next: copy `output/report.pdf` → `output/report-run-N.pdf`, copy `output/qa-report.md` → `output/qa-report-run-N.md`
-3. After run 3: present all three PDFs (`output/report-run-1.pdf`, `output/report-run-2.pdf`, `output/report.pdf`) and summarize what changed across runs
-
-**Rules:**
-- Content stays frozen after run 1 (runs 2–3 are design-only regardless of `--design-only` flag). Stage 0.5 and Stage 1 only run once, on run 1.
-- The napkin is the memory between runs. Do not pass the full QA report to the next run — distill it into napkin observations first.
-- Do not modify any files in `.claude/agents/` or `presets/`. The `/polish` command is for iterative refinement, not rule changes. Graduation of lessons to permanent rules is a separate, user-initiated action.
-
-Default preset if omitted: `consultant-report`.
-
-### Flags
-
-| Flag | Effect |
-|------|--------|
-| `--design-only` | Skip Stage 0.5 (Source Manifest) and Stage 1 (Content Agent). Reuses existing `data/content.md` and `data/source-manifest.yaml`. Errors if `data/content.md` is missing. |
+Default preset: `consultant-report`. Use `--design-only` to skip Stage 0.5 and Stage 1 when `data/content.md` already exists.
 
 ## Commands
 ```bash
