@@ -45,6 +45,7 @@ You are the gatekeeper. No report ships until you pass it. Be strict — it's be
 - [ ] No heading with zero body text below it on same page (a heading needs at least some text after it — one or two lines is fine, zero is a failure)
 - [ ] No image separated from its caption
 - [ ] No page that looks visually top-heavy or bottom-heavy
+- [ ] Final page: if the last page contains only disclaimer text and is less than 20% filled, flag as PASS WITH NOTES (not FAIL). Note that the disclaimer could be tightened to fit on the preceding page.
 
 ### Structure & Consistency
 - [ ] No more than 2 font families in the document

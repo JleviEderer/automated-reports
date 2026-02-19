@@ -39,6 +39,7 @@ You structure raw data into well-written report sections. Your output is narrati
 
 ## Output Format
 - **YAML frontmatter**: report metadata (title, subtitle, date, logo), color palette array, typography specs, image manifest with file paths and descriptions
+- **`key_metrics`** (optional): List the 5–8 most impactful numeric metrics in the report. These signal to the Design Agent which numbers deserve stat-callout treatment (large visual highlights). Only include metrics that are central to the report's thesis — not every number. Example: `key_metrics: ['$850M market cap', '9,486 LNG contracts', '$1T collateral']`
 - **Markdown body**: all prose sections using `##` for major sections, `###` for subsections
 - Inline images with `![alt](filename.png)` where they belong in the narrative
 - Use bold, emphasis, and paragraph structure naturally — this is the whole point of the format
