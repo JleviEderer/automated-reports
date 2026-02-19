@@ -13,6 +13,7 @@ Automated pipeline for producing professional, editorial-quality PDF reports fro
 ```
 ├── CLAUDE.md
 ├── .claude/agents/              # Subagent system prompts
+│   ├── manifest/manifest.md     # Source manifest agent
 │   ├── content/content.md       # Content writing agent
 │   ├── design/design.md         # HTML/CSS design agent
 │   └── QA/qa.md                 # QA validation agent
@@ -103,45 +104,11 @@ The main agent acts as the loop controller. It spawns subagents via `Task` calls
 - This ensures the stop hook and QA loop start from a clean state
 
 **Stage 0.5 — Source Manifest**
-- Main agent handles directly — no subagent
-- Scan every file in `data/` (excluding `content.md` and `source-manifest.yaml`)
-- For each file, read content and extract the best available date signal: document dates, "as of" dates, earnings call quarters, filing dates, metadata timestamps
-- Classify each source as `factual` (contains numeric metrics, financial data, performance stats that change over time), `contextual` (contains strategic rationale, expert commentary, technical explanations, qualitative analysis that doesn't go stale), or `both`
-- Produce `data/source-manifest.yaml` with:
-  - `sources`: list of entries, each with `file`, `estimated_date`, `date_confidence` (high/medium/low), `content_type` (factual/contextual/both), and `key_metrics` (list of metric name/value pairs extracted from the file)
-  - `conflicts`: list of any metric that appears in multiple sources with different values, showing each source's value and date, with a `resolution` that defaults to most-recent-source-wins — **only for factual content**. Contextual content is never deprioritized based on age alone.
-- Do NOT rename any source files. The manifest is the only output.
+- Spawn via `Task` with `subagent_type: "general-purpose"`, `mode: "bypassPermissions"`
+- Prompt: full contents of `.claude/agents/manifest/manifest.md` + the task-specific instructions
+- Input: the main agent lists all files in `data/` (excluding `content.md` and `source-manifest.yaml`) and passes the file paths in the prompt
+- Output: agent writes `data/source-manifest.yaml`
 - On re-run: regenerate the manifest from scratch (it's fast and ensures consistency)
-- Example manifest structure:
-  ```yaml
-  sources:
-    - file: "Abaxx_Q3_2025_InvestorCall.md"
-      estimated_date: "2025-11-15"
-      date_confidence: high
-      content_type: factual
-      key_metrics:
-        - name: "Q3 LNG contracts"
-          value: "9,486"
-        - name: "Connected firms"
-          value: "150+"
-
-    - file: "Why incumbents_CME&ICE_ can't beat Abaxx_DeepSky AI.docx"
-      estimated_date: "2025-09-01"
-      date_confidence: medium
-      content_type: contextual
-      key_metrics: []
-
-  conflicts:
-    - metric: "Connected firms"
-      sources:
-        - file: "Abaxx_Q3_2025_InvestorCall.md"
-          value: "150+"
-          date: "2025-11-15"
-        - file: "Abaxx_Problem_Solutions_Doc_September2025.docx"
-          value: "120+"
-          date: "2025-09-01"
-      resolution: "Use Abaxx_Q3_2025_InvestorCall.md (most recent, factual)"
-  ```
 
 **Stage 1 — Content Agent**
 - Spawn via `Task` with `subagent_type: "general-purpose"`, `mode: "bypassPermissions"`
@@ -244,7 +211,7 @@ Task(
 )
 ```
 
-The `agent_key` maps to the preset YAML section: `content` for Content Agent, `design` for Design Agent, `qa` for QA Agent.
+The `agent_key` maps to the preset YAML section: `manifest` for Source Manifest Agent, `content` for Content Agent, `design` for Design Agent, `qa` for QA Agent. The Manifest Agent has no preset overrides (it operates identically across report types), so the `## Report Type Constraints` block is omitted for Stage 0.5 spawns.
 
 ### Stop Hook Safety Net
 
@@ -265,6 +232,64 @@ Always include in stylesheets:
 - `orphans: 3; widows: 3` on paragraphs
 - Cover page suppresses headers/footers via `@page :first`
 - Use `-webkit-print-color-adjust: exact` for backgrounds
+
+## Quick Commands
+
+These are shorthand triggers the main agent recognizes as pipeline commands. When the user types one of these, execute the corresponding pipeline behavior immediately — no clarification needed.
+
+### `/run <preset> [--design-only]`
+
+Single pipeline pass with QA loop. Produces one finished PDF.
+
+```
+/run marketing-report          # Full pipeline: Stage 0 → 0.5 → 1 → 2 → 3 → 4 → QA loop
+/run consultant-report         # Same, with consultant preset
+/run marketing-report --design-only  # Skip Stage 0.5 and Stage 1 (reuse existing content.md)
+```
+
+**Behavior:**
+1. Read the preset from `presets/<preset>.yaml`
+2. Run Stage 0 (cleanup) — always runs
+3. If `--design-only`: skip Stage 0.5 and Stage 1, verify `data/content.md` exists (error if missing). Stage 0 cleanup must NOT delete `data/content.md` or `data/source-manifest.yaml` when `--design-only` is set.
+4. Otherwise: run Stage 0.5 (Source Manifest) → Stage 1 (Content Agent)
+5. Run Stage 2 (Design Agent) → Stage 3 (PDF Render) → Stage 4 (QA Agent)
+6. Enter QA loop (max 3 iterations) per the Iterative Quality Loop rules above
+7. Ship final PDF to user
+
+Default preset if omitted: `consultant-report`.
+
+### `/polish <preset> [--design-only]`
+
+3-run self-improvement loop. Runs the Design Agent forward 3 times, self-reviewing screenshots between runs and writing observations to the napkin. Does NOT modify agent `.md` files — all learning stays in `.claude/napkin.md`.
+
+```
+/polish marketing-report          # Full pipeline × 3 with self-review
+/polish consultant-report         # Same, with consultant preset
+/polish marketing-report --design-only  # Skip Stage 0.5 and Stage 1 on all 3 runs
+```
+
+**Behavior:**
+1. Read the preset from `presets/<preset>.yaml`
+2. For each run (1 of 3, 2 of 3, 3 of 3):
+   a. Run the `/run` pipeline (with `--design-only` if specified)
+   b. After QA passes (or max iterations reached), review the per-page screenshots (`output/page-*.png`)
+   c. Write observations to `.claude/napkin.md` under a new run heading — what worked, what didn't, specific page-level notes
+   d. For runs 2 and 3: inject the napkin observations from previous runs into the Design Agent prompt as additional context (append after the preset block, before task instructions). This is how the Design Agent improves across runs without modifying its `.md` file.
+   e. Archive the previous run's output before starting the next: copy `output/report.pdf` → `output/report-run-N.pdf`, copy `output/qa-report.md` → `output/qa-report-run-N.md`
+3. After run 3: present all three PDFs (`output/report-run-1.pdf`, `output/report-run-2.pdf`, `output/report.pdf`) and summarize what changed across runs
+
+**Rules:**
+- Content stays frozen after run 1 (runs 2–3 are design-only regardless of `--design-only` flag). Stage 0.5 and Stage 1 only run once, on run 1.
+- The napkin is the memory between runs. Do not pass the full QA report to the next run — distill it into napkin observations first.
+- Do not modify any files in `.claude/agents/` or `presets/`. The `/polish` command is for iterative refinement, not rule changes. Graduation of lessons to permanent rules is a separate, user-initiated action.
+
+Default preset if omitted: `consultant-report`.
+
+### Flags
+
+| Flag | Effect |
+|------|--------|
+| `--design-only` | Skip Stage 0.5 (Source Manifest) and Stage 1 (Content Agent). Reuses existing `data/content.md` and `data/source-manifest.yaml`. Errors if `data/content.md` is missing. |
 
 ## Commands
 ```bash
