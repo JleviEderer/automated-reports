@@ -7,6 +7,7 @@
 | 2026-02-17 | self | All images broken in PDF — relative path resolves to `/output/data/` | Image src must be `../data/filename.png` (relative to HTML in output/) or fix after generation with sed |
 | 2026-02-17 | self | Recommendations heading + 1 line then ~50% blank (Run 1 p8, Run 2 p10) | Section header groups with `page-break-inside: avoid` push large blocks to next page. Must reduce header group size OR drop the section-level break before short sections entirely. |
 | 2026-02-17 | self | Design Agent writes `data/` paths but HTML lives in `output/` | Always post-process: `sed -i 's|src="data/|src="../data/|g' output/report.html` |
+| 2026-02-19 | user correction | Content/Design Agents hallucinated ticker "ABX:TSX" (Barrick Gold) — correct ticker is "ABXX:CBOE Canada" (Abaxx Technologies). No source file contained the wrong ticker. Napkin then recorded it as a "pattern that works," laundering the hallucination into future runs. | Never fabricate company metadata (tickers, exchanges, legal names). If not in source material, omit or mark [VERIFY]. When promoting napkin observations to patterns, verify that verifiable facts trace back to source data, not agent fabrication. |
 
 ## Design Lessons (per-run observations)
 ### Run 1
@@ -130,7 +131,7 @@
 - **Pages 14-15 (Path to Scale + Macro Tailwind + What Comes Next)**: Three sections share two pages with continuous flow. In Run 2 these occupied pages 15-18 (four pages). The lighter heading treatment and removal of heavy section dividers between late sections enabled the compression.
 - **Page 8 (Digital Title)**: $1 Trillion stat callout + 3 Pilots stat callout create excellent visual rhythm. Was a text wall in Run 1.
 - **Page 9 (Digital Title cont. + ID++)**: Three pilot cards in two-column + single-card layout. TAM paragraph. ID++ section begins. Dense and visually varied.
-- **Cover (p1)**: Maintained all Run 2 improvements — eyebrow with ABX:TSX ticker, key stats ($850M, 150+, Q3 '25, $50M+), gold tagline, "Investor Overview" label. No regressions.
+- **Cover (p1)**: Maintained all Run 2 improvements — eyebrow with ABXX:CBOE Canada ticker, key stats ($850M, 150+, Q3 '25, $50M+), gold tagline, "Investor Overview" label. No regressions.
 
 **Remaining minor issues (not worth another iteration):**
 1. **Page 16 disclaimer spillover** — two lines of disclaimer text on an otherwise blank final page. Could tighten disclaimer or adjust p15 spacing to absorb. Exempt from density rule. Purely cosmetic.
@@ -154,8 +155,17 @@
 **What worked well:**
 - Injecting accumulated design lessons directly into the Design Agent prompt continues to produce first-pass QA passes.
 - 13 pages is notably compact for the same source material that produced 18 pages in Run 5. The lighter-headings-in-final-third rule and continuous flow are well internalized.
-- Cover maintained marketing-grade quality with key stats, gold tagline, ABX:TSX eyebrow.
+- Cover maintained marketing-grade quality with key stats, gold tagline, ABXX:CBOE Canada eyebrow.
 - Source Manifest Agent handled all 21 files cleanly in subagent (39 metrics, 5 conflicts).
+
+## Hallucination Laundering Risk
+
+When promoting napkin observations to "Patterns That Work," verify that the "pattern" traces back to source data, not to an agent's fabrication. The napkin is a self-reinforcement loop — if a hallucinated fact enters an observation (e.g., "ABX:TSX eyebrow looks good"), it gets promoted to a pattern, then injected into future agent prompts as validated truth.
+
+**Rules:**
+- Any pattern involving verifiable external facts (ticker symbols, exchange names, legal entity names, founding dates, URLs, officer titles) must be confirmed against source material before graduation.
+- Flag these patterns for human confirmation — do not auto-graduate them.
+- If a correction invalidates a pattern, update ALL references in the napkin (observations, patterns, graduation queue) in the same edit.
 
 ## Graduation Queue
 - Stage 0.5 → subagent: promoted to CLAUDE.md + new agent prompt at `.claude/agents/manifest/manifest.md`

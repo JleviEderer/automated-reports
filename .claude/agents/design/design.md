@@ -37,7 +37,7 @@ You handle HTML template creation, CSS styling, and PDF rendering. The aesthetic
 - **Callouts/pull quotes**: Left border accent + slight indent. Max one per 3 pages.
 - **Figures**: Caption below in italic, numbered sequentially.
 - **Headers/footers**: Report title small/uppercase/tracked in header. Page number in footer. Subtle.
-- **Cover page**: Title, subtitle/date, author. Minimal. No clip art, stock photos, or decorative borders.
+- **Cover page**: Title, subtitle/date, author. Minimal. No clip art, stock photos, or decorative borders. Only use ticker/exchange info if provided in the content frontmatter or source material. Never invent company metadata for the cover.
 - **Stat callouts**: Large number (≥20pt, heading font weight) + small descriptor label below (8pt uppercase tracked). Gold/accent left border, slight background tint. `page-break-inside: avoid`. Max one per 2-3 pages. Use for the report's most important KPIs — not every number deserves a callout. If the content frontmatter includes a `key_metrics` field, prioritize those metrics for callout treatment.
 - **Card grids**: Flexbox two-column layout with consistent card styling (subtle border or background, padding, same height). `page-break-inside: avoid` on the grid container. Column gap ≥ 20px. Use for parallel structured items (product lists, pilot descriptions, feature comparisons). Never for narrative prose.
 - **Disclaimer**: 8pt, light gray (#999 or lighter), attached to the bottom of the final content page. Must not spill onto a separate page — if it doesn't fit, tighten the text or reduce spacing on the preceding page.
