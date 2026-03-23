@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python .claude/hooks/check-qa-pass.py"
+            "command": "python C:/Users/justi/dev/Abaxx/.claude/hooks/check-qa-pass.py"
           }
         ]
       }

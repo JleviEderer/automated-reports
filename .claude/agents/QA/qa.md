@@ -16,7 +16,7 @@ You are the gatekeeper. No report ships until you pass it. Be strict — it's be
 - [ ] Heading hierarchy is clear and consistent
 
 ### Layout
-- [ ] Margins ≥ 1 inch, consistent throughout
+- [ ] Margins per report type constraints (default: ≥ 1 inch), consistent throughout
 - [ ] No orphaned headings — scan the bottom of EVERY page for headings with zero body text below them. A heading sitting alone at the bottom of a page (even with a decorative rule) with no prose after it is always a FAIL. Even one or two lines of text below the heading is fine; zero lines is not.
 - [ ] No widows/orphans in paragraphs (min 3 lines per page)
 - [ ] Tables and figures don't split awkwardly across pages

@@ -158,6 +158,97 @@
 - Cover maintained marketing-grade quality with key stats, gold tagline, ABXX:CBOE Canada eyebrow.
 - Source Manifest Agent handled all 21 files cleanly in subagent (39 metrics, 5 conflicts).
 
+### Run 9 (Internal Memo — 2-page constraint)
+**Result: PASS (2 pages, 2 iterations)**
+- Preset: internal-memo (updated with hard 2-page max). Georgia serif throughout, 10pt body, muted slate (#5a6d7e) accent.
+- First run: 15 pages (preset had no length constraint). User requested hard 2-page ceiling.
+- Preset rewritten: Content Agent instructions now enforce ruthless prioritization (what changed / what matters / what to do next), cut all background/competitive/macro/technical content, target 400-600 words.
+- Design constraints: 0.75in margins (tighter than default 1.25in), 10pt body, 1.4 line-height, no cover page (header block only), no stat callouts/pull quotes/card grids, no section-header-groups.
+- Iteration 1 FAIL: QA caught macro context leak (stablecoin volumes, GENIUS Act, FIA Expo in "What Matters" section) + 6-item bullet list (max 5). Both content issues.
+- Iteration 2 PASS: Macro paragraph removed, bullet consolidated from 6→5. Clean pass.
+- 21 source files → 590 words → 2 pages. The constraint held against a large corpus.
+
+**Key lessons:**
+- The preset's `content.structure` field is the right place for hard length constraints — it reaches the Content Agent before it starts writing.
+- "No macro context" must be explicit and specific in the preset, not just implied by "concise." QA correctly caught stablecoin/GENIUS Act content as macro even though it was adjacent to company-specific detail.
+- For short memos: no cover page, 0.75in margins, 10pt/1.4 line-height, no decorative components. These four changes recover ~40% of the page budget vs default settings.
+- Design Agent prompt must explicitly list which components to omit (stat callouts, pull quotes, card grids, section labels) — otherwise it defaults to including them.
+
+### Run 10 (Internal Memo — /run internal-memo)
+**Result: PASS WITH NOTES (2 pages, 2 iterations)**
+
+- Preset: internal-memo. Georgia serif throughout, 10pt body, muted slate (#5a6d7e) accent, 0.75in margins.
+- Content Agent produced 582 words, 3 sections (What Changed / What Matters / What to Do Next). No macro context leaks, no fabricated metadata.
+- Iteration 1 FAIL: QA caught 10-item bullet list in "What Changed" (max 5). Content Agent restructured to 5 bullets + prose paragraph.
+- Iteration 2: QA flagged 0.75in margins as below 1-inch minimum — overridden because preset explicitly specifies 0.75in. All other checks passed.
+- Page 2 ~15% filled (final page exempt). "What to Do Next" section spills with 3 of 5 bullets on page 2.
+- All 19 numeric metrics verified against source manifest — no conflicts.
+
+**Observations:**
+- QA Agent didn't reliably apply preset overrides to default rules (flagged 0.75in margins as FAIL despite preset specifying it). **Graduated:** made qa.md margin check preset-aware + added `min_margins` to internal-memo QA preset.
+- 10-item bullet lists were a recurring Content Agent issue for internal memos (Run 9 had 6, Run 10 had 10). **Graduated:** hardened to HARD CONSTRAINT/HARD FAIL language in both content.md and internal-memo preset.
+- The content restructuring (10→5 bullets via grouping related items) worked cleanly. Grouping by theme (Trading volumes, Network growth, New products, Digital titles, Balance sheet) is a good pattern for dense update memos.
+
+### Run 11 (Bezos 6-Pager — first test of new preset)
+**Result: PASS WITH NOTES (9 pages total: ~6.5 narrative + ~2.5 appendix, 1 iteration — clean first-pass QA)**
+- Preset: bezos-6-pager. Georgia throughout (body and headings), 10pt, slate blue (#4a5568) accent, deep navy (#1a2332) text.
+- Clean first-pass QA — no FAIL iterations needed. All 6 required sections present in correct order.
+- 3,124 words in narrative body (within 3,000–4,000 constraint).
+- Content Agent correctly synthesized Lessons Learned from multiple sources, flagged as `suggested_additions`.
+- No stat callouts, no pull quotes, no card grids, no cover page — all 6-pager constraints respected.
+- Bullets only in Goals (5 items) and Tenets (5 items) — all other sections pure prose.
+- 8 appendix tables (volumes, network KPIs, financials, pilots, regulatory, pipeline, competitive, source index).
+- No orphaned headings, no density failures, no table splits across pages.
+
+**What worked well:**
+- Inline header block (title 16pt, date/author/label in 9pt) takes <1 inch — clean and functional.
+- Georgia-only typography creates the dense, serious reading feel the preset demands.
+- 2-color palette (navy + slate blue) is visually monotone in the best way — looks like a printed internal document.
+- Thin 1px rules under section headings provide just enough visual separation without design flair.
+- Appendix tables with horizontal-only rules, no backgrounds — data tables, not design elements.
+- Continuous content flow with 18pt section spacing and 6pt paragraph spacing creates tight, readable pages.
+- Page 1: header block → Introduction → Goals all on one page. Efficient use of space.
+
+**Minor observations (not worth iterating):**
+1. Page 9 ~40-50% filled (final page exempt). Appendix G + H could be condensed.
+2. Strategic Priorities has 5 subsections with similar heading-then-prose pattern — inherent to the format.
+3. Narrative at 6.5 pages is upper end of 5-7 range — dense but appropriate.
+4. `#d0d0d0` table borders technically a third tone but functionally invisible (0.5px hairline).
+
+**Key takeaway:** The bezos-6-pager preset produced a first-pass QA pass. The Content Agent correctly adapted to the fixed 6-section structure and prose-only constraint. The Design Agent correctly suppressed all decorative elements (stat callouts, pull quotes, card grids, section-header-groups). This is the simplest, most text-focused preset — and it works out of the box because the constraints are extremely explicit. Explicit constraints > aesthetic guidance for first-run success.
+
+### Run 12 (Bezos 6-Pager v2 — tightened constraints)
+**Result: PASS WITH NOTES (7 pages: 6 narrative + 1 appendix, 2 iterations)**
+- Preset: bezos-6-pager (updated). Word target tightened to 2,800-3,400. Page range tightened to 5.5-6.5. Appendix capped at 2 pages, must-cite rule enforced.
+- Iteration 1 FAIL: QA caught 2 appendix metrics (ICE $9.3B revenue, 59% margin) not cited in narrative body. Content Agent added a 15-word parenthetical to Tenet #5.
+- Iteration 2 PASS WITH NOTES: Fix confirmed. 18/18 appendix metrics now cited. Lessons Learned flagged as suggested addition.
+- Content Agent delivered 2,911 words (vs 3,124 in Run 11) — ~200 words tighter.
+- Single consolidated appendix table (18 rows) vs 8 separate tables in Run 11. Fits on 1 page.
+- Total pages: 7 (down from 9 in Run 11). Exactly 6 narrative + 1 appendix.
+
+**What the tightened constraints achieved:**
+- Word target 2,800-3,400 produced 6 narrative pages cleanly (vs 6.5 with 3,000-4,000).
+- Appendix 2-page cap forced consolidation from 8 tables to 1 table (18 rows). Much cleaner.
+- Must-cite rule caught 2 orphaned appendix items on first pass — the rule works as intended.
+- The new appendix constraints are the biggest improvement. Forcing every item to be cited in prose keeps the appendix honest — no dumping ground.
+
+**Observation:** The must-cite-in-narrative rule for appendix items is a strong pattern. Consider graduating to a universal rule across all presets, not just bezos-6-pager.
+
+### Run 13 (Internal Memo — global skill first test)
+**Result: PASS WITH NOTES (2 pages, 1 iteration — clean first-pass QA)**
+- Preset: internal-memo. Georgia throughout, 10pt body, slate blue (#5a6d7e) accent, 0.75in margins.
+- First run through the **global skill pipeline** (`~/.claude/skills/report-generator/`). All path parameterization worked correctly — source manifest, content, design, and QA agents all received absolute paths and produced output in `./output/`.
+- Content Agent produced ~480 words, 3 sections (What Changed / What Matters / What to Do Next). 4 bullets max per list. No macro context leaks, no fabricated metadata.
+- Clean first-pass QA — no FAIL iterations. All 16 numeric metrics verified against manifest.
+- Page 2 ~30-35% filled (final page exempt). "What to Do Next" + disclaimer sit in top third.
+
+**Observations:**
+1. **Global skill works end-to-end.** Path parameterization, preset injection, napkin integration all functioned on first real test. No cross-directory path bugs.
+2. **Page balance opportunity.** Page 1 is ~95% filled, page 2 is ~30%. A design tweak could shift some "What Matters" content to page 2 for more even distribution. Not a failure — just a polish target.
+3. **One borderline sentence.** QA flagged "The competitive moat claim rests on solving identity, privacy, and legal finality simultaneously..." as borderline competitive positioning. Passed because it's a single contextual sentence, not a section. Worth watching in future memo runs.
+4. **Design Agent self-rendered PDF.** The Design Agent used Playwright internally to render a PDF and screenshots during its run, creating extra files (report_check.pdf, report_print.png, etc.). The main agent then re-rendered through the proper Stage 3 pipeline. This is harmless but redundant — consider adding a note to the Design Agent prompt that PDF rendering is handled by the orchestrator.
+5. **Source Manifest Agent handled 21 files cleanly** — 53 metrics, 6 conflicts resolved. Performance consistent with Run 8.
+
 ## Hallucination Laundering Risk
 
 When promoting napkin observations to "Patterns That Work," verify that the "pattern" traces back to source data, not to an agent's fabrication. The napkin is a self-reinforcement loop — if a hallucinated fact enters an observation (e.g., "ABX:TSX eyebrow looks good"), it gets promoted to a pattern, then injected into future agent prompts as validated truth.
@@ -166,6 +257,52 @@ When promoting napkin observations to "Patterns That Work," verify that the "pat
 - Any pattern involving verifiable external facts (ticker symbols, exchange names, legal entity names, founding dates, URLs, officer titles) must be confirmed against source material before graduation.
 - Flag these patterns for human confirmation — do not auto-graduate them.
 - If a correction invalidates a pattern, update ALL references in the napkin (observations, patterns, graduation queue) in the same edit.
+
+### Run 14 (Consultant Report — global skill, first consultant-report run since Run 3)
+**Result: PASS WITH NOTES (11 pages, 1 iteration — clean first-pass QA)**
+- Preset: consultant-report. Slate blue (#4a6580) accent. Libre Baskerville body / DM Sans headings. Off-white (#fafaf8) background.
+- Clean first-pass QA — no FAIL iterations needed. All accumulated napkin lessons applied correctly.
+- 21 source files → 4,598 words → 11 pages. 5 major sections + 9 subsections.
+- 2 stat callouts (83% LNG volume growth, $850M market cap) — well within the 2-3 max for consultant preset.
+- 2 suggested additions: "Competitive Dynamics and the Incumbent Dilemma" + "Macro Tailwinds: Energy Transition and the Tokenization Moment." Both well-integrated, flagged for human review per protocol.
+- Source Manifest: 21 files processed, 4 conflicts detected and resolved. No hallucinated metadata.
+- All 23 numeric metrics in the report verified against manifest. Conflict resolutions correctly applied ($850M cap, 3 pilots, 50% EBITDA target from Q3 call).
+
+**What worked well:**
+- First consultant-report run through the global skill infrastructure — all path parameterization, preset injection, and napkin integration worked on first attempt.
+- Lighter heading treatment in final third: Valuation and Conclusion sections used bare `<h2>` — no trapped whitespace anywhere in the report. This is now well-internalized.
+- No images in source data → no image path issues. Simplest path so far.
+- Card grid for four-pillar platform overview + one pull quote (Carrie Jaquith) → visual variety without SaaS aesthetic.
+- Page 11 (final) at ~30-35% fill — above 20% floor, not disclaimer-only. Clean.
+- Design Agent correctly suppressed stat callouts to only 2 (vs 8 available key_metrics). Good restraint.
+
+**Observations for future runs:**
+- 4,598-word content vs 8-14 page target produced 11 pages cleanly. Good calibration.
+- Two suggested additions for the Competitive Dynamics and Macro Tailwinds sections are strong — worth accepting in review.
+- No two-column layouts used (consultant preset only allows two columns for data appendices). The card grid for the four-pillar overview is the right exception.
+- Cover: title block + metadata in upper 55%, large whitespace, bottom rule — reads as boutique consulting, passes screenshot test.
+
+### Run 15 (Bezos 6-Pager — global skill, second bezos run)
+**Result: PASS (8 pages: ~6.3 narrative + ~1.7 appendix, 3 iterations — 2 FAILs before PASS)**
+- Preset: bezos-6-pager. Georgia throughout, slate blue (#4a5568) accent, 1in margins.
+- Iteration 1 FAIL (design): Narrative 7 pages (target 5.5–6.5). Appendix B too sparse. Prose paragraph in appendix header.
+- Iteration 2 FAIL (design): Narrative fixed to ~6.3 pages. Appendix B still 28-30% (new table but tiny cell padding). Appendix prose removed.
+- Iteration 3 PASS: Appendix B bumped to 55-60% fill with larger cell padding (7pt 8pt), 9.5pt font, source caption, and Key Definitions block (4 inline definitions).
+
+**What caused the failures:**
+- Spacing defaults (h2 18pt margin, h3 14pt, p 6pt) produce ~7 pages for 3,200 words. Correct values: h2 14pt, h3 10pt, p 5pt for tight 6-page output.
+- Adding a second appendix table to fix density without adjusting cell padding doesn't work — the table is too lean at default 4pt/6pt padding.
+- Key Definitions block (bolded inline definitions, not prose) is an effective appendix filler that QA accepts.
+
+**What worked:**
+- Content Agent delivered clean 3,182 words, all 6 sections, both appendix cites correct on first pass.
+- Must-cite appendix rule held — both Appendix A and B had parenthetical citations in narrative.
+- Single consolidated appendix structure (from Run 12 lesson) remained correct.
+
+**Lessons for next bezos-6-pager run — GRADUATED to bezos-6-pager.yaml:**
+- ~~Design Agent starting CSS: h2 margin-top 14pt, h3 10pt, p margin-bottom 5pt~~ → promoted to preset `page_target`
+- ~~Appendix table cell padding minimum 6pt 8pt~~ → promoted to preset `page_target`
+- ~~Key Definitions block as optional appendix element~~ → promoted to preset `page_target` (conditional, not default)
 
 ## Graduation Queue
 - Stage 0.5 → subagent: promoted to CLAUDE.md + new agent prompt at `.claude/agents/manifest/manifest.md`
@@ -183,3 +320,5 @@ When promoting napkin observations to "Patterns That Work," verify that the "pat
 - Two-column card grids for pipeline/product lists → `design.md` Components + `marketing-report.yaml`
 - Lighter headings in final third of document → `design.md` Page Break Strategy (strengthened from "short/late sections" to "final third" rule)
 - Disclaimer must not spill onto separate page → `design.md` Components + `qa.md` Page Density & Breaks
+- Hard bullet-list cap (max 5 items, HARD FAIL language) → `content.md` Never Do These + `internal-memo.yaml` content.structure
+- Preset-aware margin checks (default ≥ 1in, presets can override) → `qa.md` Layout checklist + `internal-memo.yaml` qa.min_margins

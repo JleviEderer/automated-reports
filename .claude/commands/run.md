@@ -15,16 +15,17 @@ Examples:
 
 ## Execution
 
-1. Read the preset from `presets/<preset>.yaml`
-2. **Stage 0 (Cleanup)** — always runs per CLAUDE.md "Stage 0 — Cleanup" rules. Exception: when `--design-only` is set, do NOT delete `data/content.md` or `data/source-manifest.yaml`.
-3. If `--design-only`:
-   - Verify `data/content.md` exists. If missing, stop with an error message.
-   - Skip Stage 0.5 and Stage 1.
-4. Otherwise:
-   - Run **Stage 0.5** (Source Manifest Agent)
-   - Run **Stage 1** (Content Agent)
-5. Run **Stage 2** (Design Agent) → **Stage 3** (PDF Render) → **Stage 4** (QA Agent)
-6. Enter the **QA loop** (max 3 iterations) per CLAUDE.md's "QA Loop Logic" and "Re-spawn Rules" sections.
-7. Ship final PDF to user.
+**Step 1 — Read the napkin.** Invoke the `napkin` skill before doing anything else. This surfaces accumulated lessons into working memory for the pipeline run.
 
-Follow the Agent Orchestration Protocol, Pipeline Stages, Spawning Template, and Stop Hook Safety Net sections in CLAUDE.md for all stage execution details.
+**Step 2 — Run the pipeline.** Read and follow the report-generator skill at `~/.claude/skills/report-generator/SKILL.md`.
+
+Execute it with these parameters:
+- `--source` = `./data` (resolved to absolute path from this repo's root)
+- `--output` = `./output` (resolved to absolute path from this repo's root)
+- `--preset` = parsed preset name from above
+- `--design-only` = parsed flag from above
+- `--mode` = `run`
+
+The skill contains the full orchestration protocol, agent prompts, presets, and pipeline logic. Follow it exactly.
+
+**Step 3 — Write back to the napkin.** After the pipeline completes (any terminal QA status), invoke the `napkin` skill again to log observations. The napkin skill owns all writes — do NOT manually append a run entry. Let it capture what actually happened, including any mid-run corrections, unexpected agent behavior, or design decisions worth remembering.

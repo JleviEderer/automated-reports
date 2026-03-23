@@ -13,3 +13,13 @@ __pycache__/
 ~$*
 nul
 fonts/
+
+# Dependencies
+node_modules/
+
+# Test artifacts
+test-results/
+
+# Ephemeral / session files
+HANDOVER.md
+.codex/

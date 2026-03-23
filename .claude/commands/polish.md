@@ -15,19 +15,19 @@ Examples:
 
 ## Execution
 
-1. Read the preset from `presets/<preset>.yaml`
-2. For each run (1 of 3, 2 of 3, 3 of 3):
-   a. Run the `/run` pipeline (with `--design-only` if specified for run 1; runs 2-3 are always design-only).
-   b. After QA passes (or max iterations reached), review the per-page screenshots (`output/page-*.png`).
-   c. Write observations to `.claude/napkin.md` under a new run heading — what worked, what didn't, specific page-level notes.
-   d. For runs 2 and 3: inject the napkin observations from previous runs into the Design Agent prompt as additional context (append after the preset block, before task instructions). This is how the Design Agent improves across runs without modifying its `.md` file.
-   e. Archive the previous run's output before starting the next: copy `output/report.pdf` to `output/report-run-N.pdf`, copy `output/qa-report.md` to `output/qa-report-run-N.md`.
-3. After run 3: present all three PDFs (`output/report-run-1.pdf`, `output/report-run-2.pdf`, `output/report.pdf`) and summarize what changed across runs.
+Read and follow the report-generator skill at `~/.claude/skills/report-generator/SKILL.md`.
+
+Execute it with these parameters:
+- `--source` = `./data` (resolved to absolute path from this repo's root)
+- `--output` = `./output` (resolved to absolute path from this repo's root)
+- `--preset` = parsed preset name from above
+- `--design-only` = parsed flag from above
+- `--mode` = `polish`
+
+The skill contains the full orchestration protocol including the 3-run polish loop, agent prompts, presets, and pipeline logic. Follow it exactly.
 
 ## Rules
 
-- Content stays frozen after run 1 (runs 2-3 are design-only regardless of `--design-only` flag). Stage 0.5 and Stage 1 only run once, on run 1.
+- Content stays frozen after run 1 (runs 2-3 are design-only regardless of `--design-only` flag).
 - The napkin is the memory between runs. Do not pass the full QA report to the next run — distill it into napkin observations first.
-- Do not modify any files in `.claude/agents/` or `presets/`. The `/polish` command is for iterative refinement, not rule changes. Graduation of lessons to permanent rules is a separate, user-initiated action.
-
-Follow the Agent Orchestration Protocol, Pipeline Stages, Spawning Template, and Stop Hook Safety Net sections in CLAUDE.md for all stage execution details.
+- Do not modify any files in `~/.claude/skills/report-generator/agents/` or `~/.claude/skills/report-generator/presets/`. The `/polish` command is for iterative refinement, not rule changes. Graduation of lessons to permanent rules is a separate, user-initiated action.

@@ -1,182 +1,85 @@
 /* ============================================================
-   ABAXX TECHNOLOGIES — PRINT CSS
-   Marketing Report Preset
-   Deep navy (#1a2332) + Gold (#C8A55A)
-   DM Sans headings / Libre Baskerville body
+   BEZOS 6-PAGER — PRINT CSS
+   US Letter | Georgia only | 2 colors max
+   Navy text (#1a2332) + Slate blue accent (#4a5568)
+   Dense, text-heavy, reading document. No visual flair.
    ============================================================ */
 
 :root {
-  --navy: #1a2332;
-  --gold: #C8A55A;
-  --gold-light: rgba(200, 165, 90, 0.10);
-  --gold-border: rgba(200, 165, 90, 0.30);
-  --bg: #fafaf8;
   --text: #1a2332;
-  --text-light: #4a5568;
-  --text-lighter: #8a8a8a;
+  --accent: #4a5568;
   --white: #ffffff;
+  --rule: #4a5568;
 }
 
 /* ---- RESET & BASE ---- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
-  font-size: 11pt;
+  font-size: 10pt;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
 
 body {
-  font-family: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
+  font-family: Georgia, 'Times New Roman', serif;
   color: var(--text);
   background: var(--white);
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 /* ---- PAGE (PRINT) ---- */
 @page {
   size: letter;
-  margin: 1.25in;
-  @top-center {
-    content: "ABAXX TECHNOLOGIES";
-    font-family: 'DM Sans', sans-serif;
-    font-size: 7pt;
-    letter-spacing: 0.12em;
-    color: #999;
-    text-transform: uppercase;
-  }
-  @bottom-center {
-    content: counter(page);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 8pt;
-    color: #999;
-  }
+  margin: 1in;
 }
 
 @page :first {
-  margin: 0;
-  @top-center { content: none; }
-  @bottom-center { content: none; }
+  @bottom-right { content: none; }
+}
+
+@page {
+  @bottom-right {
+    content: counter(page);
+    font-family: Georgia, serif;
+    font-size: 8pt;
+    color: var(--accent);
+  }
 }
 
 /* ============================================================
-   COVER PAGE
+   HEADER BLOCK — compact, <=1 inch vertical space
+   No cover page. Title + meta, then straight into content.
    ============================================================ */
-.cover {
-  height: 10in;
-  background: var(--navy);
-  color: var(--white);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 1.5in 1.5in 1in 1.5in;
-  page-break-after: always;
-  position: relative;
-  overflow: hidden;
+.memo-header {
+  margin-bottom: 18pt;
+  padding-bottom: 8pt;
+  border-bottom: 1px solid var(--rule);
 }
 
-.cover::before {
-  content: '';
-  position: absolute;
-  top: -60%;
-  right: -30%;
-  width: 80%;
-  height: 180%;
-  background: radial-gradient(ellipse, rgba(200,165,90,0.06) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.cover-eyebrow {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 9pt;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 0.5in;
-}
-
-.cover-title {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 30pt;
-  font-weight: 800;
-  line-height: 1.15;
-  margin-bottom: 0.18in;
-  max-width: 6in;
-}
-
-.cover-subtitle {
-  font-family: 'Libre Baskerville', serif;
-  font-size: 12.5pt;
-  font-weight: 400;
-  font-style: italic;
-  color: rgba(255,255,255,0.7);
-  line-height: 1.5;
-  margin-bottom: 0.5in;
-  max-width: 5.5in;
-}
-
-.cover-tagline {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 9.5pt;
-  font-weight: 400;
-  letter-spacing: 0.12em;
-  color: var(--gold);
-  margin-bottom: 0.6in;
-}
-
-.cover-stats {
-  display: flex;
-  gap: 0;
-  margin-top: auto;
-  margin-bottom: 0.35in;
-}
-
-.cover-stat {
-  flex: 1;
-  padding: 0 0.3in;
-  border-left: 1px solid var(--gold);
-}
-
-.cover-stat:first-child {
-  padding-left: 0;
-  border-left: none;
-}
-
-.cover-stat-value {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 17pt;
+.memo-title {
+  font-family: Georgia, serif;
+  font-size: 16pt;
   font-weight: 700;
-  color: var(--gold);
+  color: var(--text);
   line-height: 1.2;
+  margin: 0 0 4pt 0;
 }
 
-.cover-stat-label {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 7pt;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  color: rgba(255,255,255,0.55);
-  margin-top: 3px;
-  text-transform: uppercase;
-}
-
-.cover-date {
-  font-family: 'DM Sans', sans-serif;
+.memo-meta {
+  font-family: Georgia, serif;
   font-size: 9pt;
-  color: rgba(255,255,255,0.45);
-  margin-top: 0.12in;
+  color: var(--accent);
+  line-height: 1.4;
 }
 
-.cover-footer {
-  position: absolute;
-  bottom: 0.5in;
-  left: 1.5in;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 7.5pt;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
+.memo-meta .meta-line {
+  display: block;
+  margin-bottom: 1pt;
+}
+
+.memo-meta .meta-label {
+  font-weight: 700;
 }
 
 /* ============================================================
@@ -186,214 +89,153 @@ body {
   max-width: 6.5in;
 }
 
-/* ---- SECTION HEADERS (full treatment) ---- */
-.section-header-group {
-  page-break-inside: avoid;
-}
-
-.section-label {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 7.5pt;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 5px;
-}
-
+/* ---- SECTION HEADINGS (h2) ---- */
 h2 {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 18pt;
-  font-weight: 700;
-  color: var(--navy);
-  line-height: 1.25;
-  margin-bottom: 6px;
-  page-break-after: avoid;
-}
-
-h2.section-heading-full {
-  margin-bottom: 4px;
-}
-
-hr.section-divider {
-  border: none;
-  border-top: 2px solid var(--gold);
-  width: 50px;
-  margin: 0 0 12px 0;
-}
-
-/* ---- LIGHTER H2 (bare) ---- */
-h2.bare {
-  font-size: 16pt;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  page-break-after: avoid;
-}
-
-/* ---- H3 ---- */
-h3 {
-  font-family: 'DM Sans', sans-serif;
+  font-family: Georgia, serif;
   font-size: 13pt;
-  font-weight: 600;
-  color: var(--navy);
-  line-height: 1.3;
-  margin-top: 16px;
-  margin-bottom: 6px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.25;
+  margin: 0 0 2pt 0;
+  padding-bottom: 3pt;
+  border-bottom: 1px solid var(--rule);
   page-break-after: avoid;
+}
+
+/* ---- SUBSECTION HEADINGS (h3) ---- */
+h3 {
+  font-family: Georgia, serif;
+  font-size: 11pt;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+  margin: 14pt 0 4pt 0;
+  page-break-after: avoid;
+}
+
+/* ---- SECTIONS ---- */
+.section {
+  margin-top: 18pt;
+}
+
+.section:first-child {
+  margin-top: 0;
 }
 
 /* ---- PARAGRAPHS ---- */
 p {
-  margin-bottom: 10px;
+  margin-bottom: 6pt;
   orphans: 3;
   widows: 3;
   text-align: left;
+  line-height: 1.5;
 }
 
 strong {
   font-weight: 700;
-  color: var(--navy);
 }
 
-/* ---- SECTION SPACING ---- */
-.section {
-  margin-top: 22px;
-}
-
-.section-first {
-  margin-top: 0;
-}
-
-/* ---- STAT CALLOUTS ---- */
-.stat-callout {
-  border-left: 3px solid var(--gold);
-  background: var(--gold-light);
-  padding: 14px 18px;
-  margin: 14px 0;
-  page-break-inside: avoid;
-}
-
-.stat-callout-value {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 22pt;
-  font-weight: 800;
-  color: var(--navy);
-  line-height: 1.15;
-}
-
-.stat-callout-label {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 8pt;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-light);
-  margin-top: 3px;
-  line-height: 1.4;
-}
-
-/* ---- PULL QUOTES ---- */
-.pull-quote {
-  border-left: 3px solid var(--gold);
-  padding: 12px 0 12px 20px;
-  margin: 16px 0;
-  page-break-inside: avoid;
-}
-
-.pull-quote p {
-  font-family: 'Libre Baskerville', serif;
+em {
   font-style: italic;
-  font-size: 11.5pt;
-  color: var(--navy);
-  line-height: 1.55;
-  margin-bottom: 6px;
 }
 
-.pull-quote-attr {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 8pt;
-  font-weight: 500;
-  color: var(--text-light);
-  letter-spacing: 0.04em;
+/* ---- BULLET LISTS (Goals / Tenets only) ---- */
+ul, ol {
+  margin: 4pt 0 6pt 0;
+  padding-left: 1.5em;
 }
 
-/* ---- TWO-COLUMN CARD GRIDS ---- */
-.two-col-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin: 14px 0;
-  page-break-inside: avoid;
-}
-
-.card {
-  background: var(--gold-light);
-  border: 1px solid var(--gold-border);
-  padding: 14px 16px;
-  page-break-inside: avoid;
-}
-
-.card-title {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10pt;
-  font-weight: 700;
-  color: var(--navy);
-  margin-bottom: 4px;
-}
-
-.card p {
-  font-size: 9.5pt;
+ul li, ol li {
+  margin-bottom: 4pt;
   line-height: 1.5;
-  margin-bottom: 0;
-  color: var(--text-light);
-}
-
-/* ---- BOLD TAKEAWAY BLOCK ---- */
-.bold-takeaway {
-  font-family: 'Libre Baskerville', serif;
-  font-weight: 700;
-  font-size: 11.5pt;
-  color: var(--navy);
-  margin: 14px 0;
-  line-height: 1.55;
-}
-
-/* ---- BULLET LISTS ---- */
-ul {
-  margin: 8px 0 12px 0;
-  padding-left: 1.2em;
-}
-
-ul li {
-  margin-bottom: 5px;
-  line-height: 1.55;
 }
 
 ul li::marker {
-  color: var(--gold);
+  color: var(--accent);
 }
 
-/* ---- DISCLAIMER ---- */
-.disclaimer {
-  margin-top: 20px;
-  padding-top: 10px;
-  border-top: 1px solid #ddd;
-  font-size: 8pt;
-  line-height: 1.45;
-  color: #999;
+ol li::marker {
+  color: var(--accent);
+  font-weight: 700;
 }
 
-/* ---- PRINT UTILITIES ---- */
-.avoid-break { page-break-inside: avoid; }
+/* ---- TABLES ---- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8pt 0;
+  font-size: 8.5pt;
+  line-height: 1.35;
+  page-break-inside: avoid;
+}
+
+thead {
+  border-bottom: 1.5px solid var(--text);
+}
+
+th {
+  font-family: Georgia, serif;
+  font-weight: 700;
+  text-align: left;
+  padding: 3pt 6pt 3pt 0;
+  color: var(--text);
+  border-bottom: 1.5px solid var(--text);
+  vertical-align: bottom;
+}
+
+td {
+  font-family: Georgia, serif;
+  padding: 3pt 6pt 3pt 0;
+  border-bottom: 0.5px solid #d0d0d0;
+  vertical-align: top;
+  color: var(--text);
+}
+
+tr:last-child td {
+  border-bottom: 1px solid var(--text);
+}
+
+/* No vertical lines, no backgrounds */
+th, td {
+  background: none;
+  border-left: none;
+  border-right: none;
+}
+
+/* ---- APPENDIX SEPARATOR ---- */
+.appendix-separator {
+  margin-top: 24pt;
+  padding-top: 6pt;
+  border-top: 1.5px solid var(--text);
+}
+
+.appendix-separator h2 {
+  font-size: 14pt;
+  border-bottom: none;
+  margin-bottom: 12pt;
+}
 
 /* ---- PRINT-SPECIFIC ---- */
 @media print {
-  body { background: #ffffff; }
-  .cover {
-    background: var(--navy) !important;
-    padding: 1.5in 1.5in 1in 1.5in;
+  body {
+    background: #ffffff;
   }
-  .stat-callout, .card { background: var(--gold-light) !important; }
-  .content { padding: 0; }
-  .section { padding: 0; }
+  .content {
+    padding: 0;
+  }
+  /* Ensure continuous flow — no forced breaks */
+  .section {
+    page-break-before: auto;
+    page-break-inside: auto;
+  }
+  h2, h3 {
+    page-break-after: avoid;
+  }
+  table {
+    page-break-inside: avoid;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
 }
