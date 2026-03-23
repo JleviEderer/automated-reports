@@ -1,0 +1,165 @@
+name: "Bezos 6-Pager"
+description: "Amazon-style narrative memo — dense prose, fixed structure, data-driven, no slides"
+
+content:
+  tone: |
+    Direct, analytical, truth-seeking. Write as a senior leader presenting a
+    plan to peers who will read in silence for 20 minutes before asking hard
+    questions. No selling, no hedging, no filler. Every sentence carries
+    information. Lead each paragraph with its key point — the first sentence
+    summarizes the paragraph's argument.
+  structure: |
+    HARD CONSTRAINT: Use exactly this 6-section structure, in this order.
+    Do not rename, reorder, merge, or omit sections. If source material lacks
+    data for a section, write what you can and flag gaps explicitly.
+
+    1. **Introduction** (0.5–1 page)
+       The core challenge or opportunity. Self-sufficient — a reader unfamiliar
+       with the domain should grasp the situation from this section alone.
+       Often easiest to write last. No "In this memo we will discuss..." — just
+       state the problem or opportunity directly.
+
+    2. **Goals** (0.5 page)
+       Measurable success metrics. Format each goal as:
+       `<metric today>` → `<metric target>` by `<date>`.
+       Bullet points are acceptable here (this is the ONLY section where
+       bullets are the default format). Max 5 goals.
+
+    3. **Tenets** (0.5 page)
+       Guiding principles that inform decisions throughout the plan. These are
+       NOT a mission statement — they are operational filters for resolving
+       trade-offs. Write as numbered principles, each one sentence, with a
+       brief (1–2 sentence) explanation of why it matters. Example: "We
+       prioritize reliability over feature velocity — downtime destroys trust
+       faster than new features build it."
+
+    4. **State of the Business** (1 page)
+       Data-driven snapshot of current conditions. Structure, execution,
+       performance vs. prior goals. Not just metrics — include diagnosis.
+       Explain *why*, not just *what*. Use inline tables or data where they
+       serve the narrative.
+
+    5. **Lessons Learned** (0.5–1 page)
+       What went well, what didn't, backed by data. Lead with brutal honesty.
+       Reference prior-period goals and whether they were met. "When we
+       previously did X, we saw Y" is the template — evidence over opinion.
+
+    6. **Strategic Priorities** (2–3 pages)
+       The core of the document. Concrete, actionable execution plan to
+       achieve the goals. Each priority gets a subsection (### heading) with:
+       what will be done, why it matters, how success will be measured, and
+       key risks. This is where the substance lives.
+
+    7. **Appendix** (max 2 pages)
+       Supporting tables, charts, and raw data only — no prose paragraphs.
+       Every appendix item MUST be cited in the narrative body with a short
+       parenthetical (e.g., "see Appendix A"). If an appendix item is not
+       referenced in the prose, cut it. The appendix does NOT count toward
+       the 6-page target but must not exceed 2 pages.
+
+    HARD CONSTRAINT: The narrative body (sections 1–6) must be 2,800–3,400
+    words, targeting exactly 6 pages at 10pt single-spaced. Err short — 6
+    tight pages beat 7 padded ones.
+
+    Writing rules specific to 6-pagers:
+    - Narrative prose, not bullets (except Goals section). Convert any bullet
+      list in other sections to prose paragraphs.
+    - Quantify business value. Don't just say "we should" — show the dollar
+      or metric impact.
+    - Every claim must be backed by evidence. "We believe X will work" is
+      weak. "When we did X in Q2, revenue increased 14%" is strong.
+    - No sentence should exist purely to transition. Cut "Furthermore,"
+      "Additionally," "It's worth noting," and all connective filler.
+    - Self-sufficient. The reader should not need any other document to
+      understand this one.
+  frontmatter_note: |
+    Do NOT include key_metrics — 6-pagers have no stat callouts.
+    Frontmatter should include title, date, author/team, and document type
+    ("6-Pager Memo"). Colors and typography fields describe source material
+    only, as with other presets.
+
+design:
+  aesthetic: |
+    Dense, text-heavy, reading document — not a looking-at document.
+    Think internal Amazon planning memo printed on plain paper.
+    No visual flair. No design for design's sake. The prose IS the design.
+  accent_color: |
+    One muted color for section headings and horizontal rules only: slate
+    blue (#4a5568), charcoal (#374151), or muted teal (#2c7a7b). Use
+    sparingly — headings and thin rules only. No background tints, no
+    colored callout boxes, no accent borders on body content.
+  fonts:
+    body: "Georgia at 10pt, single-spaced (line-height 1.5)"
+    headings: "Georgia bold, same family as body — no sans-serif contrast"
+  body_size: "10pt"
+  cover: |
+    NO separate cover page. The memo starts with a simple header block:
+    title (bold, 16pt), date, and author/team name. No document type label
+    — the reader doesn't need to be told it's a 6-pager. Then immediately
+    into Section 1. The header takes no more than 1 inch of vertical space.
+    No decorative elements, no logos, no rules above the title.
+  columns: "Single column only. No exceptions."
+  page_target: |
+    HARD CONSTRAINT: 6 pages of narrative content (sections 1–6) on US
+    Letter (8.5x11in). 5.5–6.5 pages acceptable. Appendix max 2 pages additional.
+
+    No stat callouts. No pull quotes. No card grids. No section-header-group
+    wrappers — just bare headings with page-break-after: avoid.
+
+    Margins: 1 inch all sides.
+    Line height: 1.5 for body text.
+    Section spacing: 18pt between sections — enough to separate, not enough
+    to waste space.
+    Paragraph spacing: 6pt between paragraphs (tighter than default).
+
+    Section headings: bold Georgia, 13pt, with a thin (1px) horizontal rule
+    below. No decorative labels, no uppercase tracking, no section numbers
+    in the headings themselves.
+
+    Subsection headings (### in Strategic Priorities): bold Georgia 11pt,
+    no rule, no extra spacing beyond the standard 18pt.
+
+    Page numbers in footer, right-aligned, 8pt. No header text.
+    No headers/footers on page 1 (the title header block serves that role).
+
+    Tables: simple horizontal rules, no backgrounds, no vertical lines.
+    Compact styling — these are data tables, not design elements.
+
+qa:
+  body_size_range: "10-11pt"
+  min_margins: "1in"
+  max_colors: 2
+  page_range: "5.5-6.5 pages narrative (excluding appendix). Outside this range is HARD FAIL."
+  screenshot_test: |
+    Looks like a serious internal planning document — dense prose, minimal
+    decoration, clearly meant to be read carefully, not skimmed. Would not
+    look out of place printed and read in silence at an Amazon S-team
+    meeting. NOT a consulting report, NOT a marketing piece, NOT a slide
+    deck reformatted as a document.
+  type_specific_notes: |
+    HARD FAIL conditions (route to content):
+    - Missing any of the 6 required sections (Introduction, Goals, Tenets,
+      State of the Business, Lessons Learned, Strategic Priorities)
+    - Bullet lists in any section other than Goals or Tenets (prose only)
+    - Narrative body under 2,500 or over 3,600 words
+    - Claims without supporting data or evidence
+    - Filler phrases: "It's worth noting," "Interestingly," "Furthermore"
+    - Section that reads like a slide deck (all bullets, no paragraphs)
+
+    HARD FAIL conditions (route to design):
+    - Separate cover page (memo must start with inline header block)
+    - Stat callouts, pull quotes, or card grids present
+    - More than 2 colors used (excluding images)
+    - Sans-serif body font
+    - Narrative body exceeds 6.5 pages or falls under 5.5 pages (excluding
+      appendix)
+    - Appendix exceeds 2 pages
+
+    HARD FAIL conditions (route to content):
+    - Appendix item not referenced in narrative body with parenthetical cite
+    - Prose paragraphs in appendix (tables and data only)
+
+    PASS WITH NOTES conditions:
+    - Appendix is referenced but sparse (< 1 page of supporting data)
+    - A section is notably thin due to limited source material (flag which
+      section and why)
