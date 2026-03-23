@@ -23,3 +23,16 @@ test-results/
 # Ephemeral / session files
 HANDOVER.md
 .codex/
+
+# Separate projects / not part of report pipeline
+dashboard/
+templates/agent-system/
+
+# Installed skills (managed by npx skills, not version controlled here)
+.agents/
+.claude/skills/
+skills-lock.json
+
+# Source content (input material, not pipeline code)
+Abaxx_Q3_2025_InvestorCall.md
+Strategic_Complementarity_Report_Erebor_Abaxx.md
