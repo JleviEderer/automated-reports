@@ -59,6 +59,7 @@ Report type presets live in `~/.claude/skills/report-generator/presets/`. Each p
 Pipeline commands in `.claude/commands/` invoke the global skill with repo-local paths:
 - `/run <preset> [--design-only]` — single pipeline pass with QA loop
 - `/polish <preset> [--design-only]` — 3-run self-improvement loop with napkin-driven learning
+- `/eval [--scope <full|napkin-only|qa-only>]` — audit the learning system's health (napkin integrity, QA consistency, coverage gaps, graduation queue, variance)
 
 Default preset: `consultant-report`. Use `--design-only` to skip Stage 0.5 and Stage 1 when `output/content.md` already exists.
 

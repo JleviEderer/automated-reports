@@ -45,22 +45,64 @@
 - Clean QA PASS — no issues, no notes blocking.
 
 ## Patterns That Work
+
 - Slate blue accent (#4a6580) for consultant reports
-- Two-column layout for shorter parallel content (Design Principles, Appendix)
+  - validated: 4 | last: 2026-03-04 | presets: consultant-report
+  - outcomes: Run 1 PASS, Run 2 PASS, Run 3 PASS, Run 14 PASS
+
+- Two-column layout for shorter parallel content (Design Principles, Appendix, product pipelines)
+  - validated: 6 | last: 2026-03-04 | presets: consultant-report, marketing-report
+  - outcomes: Run 3 PASS, Run 5 PASS, Run 6 PASS, Run 7 PASS, Run 8 PASS, Run 14 PASS
+
 - Variant tags with colored slate-blue background
+  - validated: 2 | last: 2026-02-17 | presets: consultant-report
+  - outcomes: Run 1 PASS, Run 3 PASS
+
 - Callout/pull-quote boxes for key conclusions
+  - validated: 7 | last: 2026-03-04 | presets: consultant-report, marketing-report
+  - outcomes: Run 1 PASS, Run 3 PASS, Run 5 PASS, Run 6 PASS, Run 7 PASS, Run 8 PASS, Run 14 PASS
+
 - Continuous flow with visual dividers instead of forced page breaks
+  - validated: 4 | last: 2026-03-04 | presets: consultant-report, marketing-report
+  - outcomes: Run 3 PASS, Run 7 PASS, Run 8 PASS, Run 14 PASS
+
 - Tell Design Agent to use `../data/` paths directly (eliminates post-processing)
+  - validated: 6 | last: 2026-02-25 | presets: consultant-report, marketing-report
+  - outcomes: Run 3 PASS, Run 4 PASS, Run 5 PASS, Run 6 PASS, Run 7 PASS, Run 8 PASS
+
 - `page.wait_for_function` to verify all images loaded before PDF render
+  - validated: 7 | last: 2026-03-04 | presets: all
+  - outcomes: Run 3 PASS, Run 4 PASS, Run 5 PASS, Run 6 PASS, Run 7 PASS, Run 8 PASS, Run 14 PASS
+
 - Billboard images at ~80% width with italic figcaptions look professional
+  - validated: 2 | last: 2026-02-17 | presets: consultant-report
+  - outcomes: Run 2 PASS, Run 3 PASS
+
 - Lighter heading treatment (just `<h2>` + `page-break-after: avoid`, no section label/rule/container) for sections after dense content — prevents trapped whitespace
+  - validated: 5 | last: 2026-03-04 | presets: consultant-report, marketing-report, internal-memo
+  - outcomes: Run 3 PASS, Run 7 PASS, Run 8 PASS, Run 13 PASS, Run 14 PASS
+
 - Content Agent marks consolidated sections via `suggested_additions` frontmatter — QA flags for human review without auto-failing
+  - validated: 5 | last: 2026-03-04 | presets: consultant-report, marketing-report, bezos-6-pager
+  - outcomes: Run 5 PASS, Run 8 PASS, Run 11 PASS, Run 12 PASS, Run 14 PASS
 
 ## Patterns That Don't Work
+
 - `src="data/"` in HTML living in `output/` — resolves to wrong directory
+  - validated: 3 | last: 2026-02-17 | presets: consultant-report
+  - outcomes: Run 1 FAIL, Run 2 FAIL, Run 3 confirmed fix
+
 - Design Agent adding sections on its own (without Content Agent's `suggested_additions` marking)
-- Section header groups (`page-break-inside: avoid`) on SECTION labels create dead space when content after the intro won't fit on the same page — the heading protection works but traps whitespace
+  - validated: 2 | last: 2026-02-17 | presets: consultant-report
+  - outcomes: Run 2 FAIL, Run 3 confirmed fix
+
+- Section header groups (`page-break-inside: avoid`) on SECTION labels create dead space when content after the intro won't fit on the same page
+  - validated: 4 | last: 2026-02-25 | presets: consultant-report, marketing-report
+  - outcomes: Run 1 FAIL, Run 2 FAIL, Run 5 FAIL, Run 6 FAIL
+
 - Putting section-level dividers before short end-of-page sections (Distance Readability → Recommendations transition is the worst offender)
+  - validated: 2 | last: 2026-02-17 | presets: consultant-report
+  - outcomes: Run 1 FAIL, Run 2 FAIL
 
 ### Run 4 (Marketing Report — Abaxx Technologies)
 **Result: PASS WITH NOTES (15 pages, 2 iterations)**
@@ -305,20 +347,37 @@ When promoting napkin observations to "Patterns That Work," verify that the "pat
 - ~~Key Definitions block as optional appendix element~~ → promoted to preset `page_target` (conditional, not default)
 
 ## Graduation Queue
-- Stage 0.5 → subagent: promoted to CLAUDE.md + new agent prompt at `.claude/agents/manifest/manifest.md`
 
-### Candidates (from Runs 5-7):
-- Cover `height: 10in` is fragile — needs a robust print-safe alternative. Consider `height: 100%` on `@page :first` context, or calculate from page size minus margins. Revisit when A4 support needed.
+### Ready (validated >= 3, presets >= 2)
+
+- Must-cite-in-narrative rule for appendix items — keeps appendix honest, no dumping ground
+  - validated: 3 | last: 2026-03-15 | presets: bezos-6-pager, consultant-report
+  - outcomes: Run 12 PASS, Run 14 PASS, Run 15 PASS
+  - **ACTION: Promote to permanent rule in qa.md and content.md**
+
+### Watching (validated < 3 or presets < 2)
+
+- Cover `height: 10in` is fragile — needs a robust print-safe alternative. Consider `height: 100%` on `@page :first` context, or calculate from page size minus margins
+  - validated: 2 | last: 2026-02-25 | presets: marketing-report
+  - outcomes: Run 6 FAIL (cover overflow), Run 7 PASS (10in workaround)
+
 - Napkin-driven iteration (injecting accumulated lessons into Design Agent prompt without modifying agent `.md`) is effective for multi-run refinement
+  - validated: 2 | last: 2026-02-25 | presets: marketing-report
+  - outcomes: Run 7 PASS (16 pages from 19), Run 8 PASS (13 pages first-pass)
 
-### Promoted to permanent rules:
-- `../data/` image paths → `design.md` File Contract
-- Lighter heading for short sections → `design.md` Page Break Strategy
-- `suggested_additions` frontmatter flow → `content.md` Writing Rules + `design.md` File Contract + `qa.md` Content checklist + `consultant-report.yaml` structure
-- `page.wait_for_function` image load verification → `CLAUDE.md` Stage 3
-- Stat callouts (gold/accent left border, large number, small label) → `design.md` Components + `marketing-report.yaml` + `consultant-report.yaml`
-- Two-column card grids for pipeline/product lists → `design.md` Components + `marketing-report.yaml`
-- Lighter headings in final third of document → `design.md` Page Break Strategy (strengthened from "short/late sections" to "final third" rule)
-- Disclaimer must not spill onto separate page → `design.md` Components + `qa.md` Page Density & Breaks
-- Hard bullet-list cap (max 5 items, HARD FAIL language) → `content.md` Never Do These + `internal-memo.yaml` content.structure
-- Preset-aware margin checks (default ≥ 1in, presets can override) → `qa.md` Layout checklist + `internal-memo.yaml` qa.min_margins
+- Key Definitions block as optional appendix filler element
+  - validated: 1 | last: 2026-03-15 | presets: bezos-6-pager
+  - outcomes: Run 15 PASS
+
+### Promoted
+
+- `../data/` image paths → design.md File Contract (promoted 2026-02-17)
+- Lighter heading for short sections → design.md Page Break Strategy (promoted 2026-02-20)
+- `suggested_additions` frontmatter flow → content.md + design.md + qa.md + consultant-report.yaml (promoted 2026-02-20)
+- `page.wait_for_function` image load verification → CLAUDE.md Stage 3 (promoted 2026-02-20)
+- Stat callouts → design.md Components + marketing/consultant presets (promoted 2026-02-25)
+- Two-column card grids → design.md Components + marketing-report.yaml (promoted 2026-02-25)
+- Lighter headings in final third → design.md Page Break Strategy (promoted 2026-02-25)
+- Disclaimer no-spill → design.md + qa.md (promoted 2026-02-25)
+- Hard bullet-list cap (max 5, HARD FAIL) → content.md + internal-memo.yaml (promoted 2026-03-01)
+- Preset-aware margin checks → qa.md + internal-memo.yaml (promoted 2026-03-01)
